@@ -17,10 +17,10 @@
   "bin": {},
   "dependencies": {
     "@handy-common-utils/promise-utils": "^1.0.5",
-    "fs-extra": "^9.0.1",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
-    "@oclif/plugin-help": "^3.2.0"
+    "@oclif/plugin-help": "^3.2.0",
+    "fs-extra": "^9.0.1"
   },
   "devDependencies": {
     "@handy-common-utils/dev-dependencies": "^1.0.10",
