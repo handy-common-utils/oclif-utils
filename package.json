@@ -1,0 +1,47 @@
+{
+  "name": "@handy-common-utils/oclif-utils",
+  "version": "1.0.0",
+  "description": "oclif related utilities",
+  "scripts": {
+    "pretest": "eslint . --ext .ts",
+    "test": "nyc mocha -r ts-node/register test/**/*spec.ts",
+    "prepare": "shx rm -rf dist && tsc",
+    "preversion": "generate-api-docs-and-update-readme && git add README.md"
+  },
+  "files": [
+    "package.json",
+    "dist"
+  ],
+  "main": "dist/oclif-utils.js",
+  "types": "dist/oclif-utils.d.ts",
+  "bin": {},
+  "dependencies": {
+    "@handy-common-utils/promise-utils": "^1.0.5",
+    "fs-extra": "^9.0.1",
+    "@oclif/command": "^1.8.0",
+    "@oclif/config": "^1.17.0",
+    "@oclif/plugin-help": "^3.2.0"
+  },
+  "devDependencies": {
+    "@handy-common-utils/dev-dependencies": "^1.0.10",
+    "@types/fs-extra": "^9.0.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/handy-common-utils/oclif-utils#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/handy-common-utils/oclif-utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/handy-common-utils/oclif-utils/issues"
+  },
+  "keywords": [
+    "oclif",
+    "utils",
+    "utilities"
+  ],
+  "author": "James Hu",
+  "license": "Apache-2.0"
+}
