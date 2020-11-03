@@ -1,0 +1,9 @@
+{
+  "extends": "./node_modules/@handy-common-utils/dev-utils/tsconfig.json",
+  "include": [
+    "src/**/*"
+  ],
+  "compilerOptions": {
+    "outDir": "dist"
+  }
+}
