@@ -5,7 +5,7 @@
   "scripts": {
     "pretest": "eslint . --ext .ts",
     "test": "nyc mocha -r ts-node/register test/**/*spec.ts",
-    "prepare": "shx rm -rf dist && tsc",
+    "prepare": "shx rm -rf dist && tsc && es-check",
     "preversion": "generate-api-docs-and-update-readme && git add README.md"
   },
   "files": [
@@ -23,8 +23,9 @@
     "fs-extra": "^9.0.1"
   },
   "devDependencies": {
-    "@handy-common-utils/dev-dependencies": "^1.0.10",
-    "@types/fs-extra": "^8.1.1"
+    "@handy-common-utils/dev-dependencies": "^1.0.11",
+    "@types/fs-extra": "^8.1.1",
+    "es-check": "^5.1.2"
   },
   "publishConfig": {
     "access": "public"
