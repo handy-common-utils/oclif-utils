@@ -13,19 +13,54 @@ npm install @handy-common-utils/oclif-utils
 Then you can use it in the code:
 
 ```javascript
-import { OclifUtils } from '@handy-common-utils/promise-utils';
+import { OclifUtils } from '@handy-common-utils/oclif-utils';
 
-protected async init() {
-  OclifUtils.prependCliToExamples(this);
-  return super.init();
+class AwsServerlessDataflow extends Command {
+  // You can use "typeof AwsServerlessDataflow.Options" in other places to refer to the type
+  static Options: CommandOptions<typeof AwsServerlessDataflow>
+
+  // ... other code ...
+
+  static flags = {
+    version: flags.version({ char: 'v' }),
+    help: flags.help({ char: 'h' }),
+    'update-readme.md': flags.boolean({ hidden: true, description: 'For developers only, don\'t use' }),
+    // ... other code ...
+  }
+
+  static examples = [
+    '^ -r ap-southeast-2 -s',
+    `^ -r ap-southeast-2 -s -i '*boi*' -i '*datahub*' \\
+      -x '*jameshu*' -c`,
+    `^ -r ap-southeast-2 -s -i '*lr-*' \\
+      -i '*lead*' -x '*slack*' -x '*lead-prioritization*' \\
+      -x '*lead-scor*' -x '*LeadCapture*' -c`,
+  ];
+
+  protected async init() {
+    OclifUtils.prependCliToExamples(this);  // "^" at the beginning of the examples will be replaced by the actual command
+    return super.init();
+  }
+
+  async run(argv?: string[]) {
+    const options = this.parse<CommandFlags<typeof AwsServerlessDataflow>, CommandArgs<typeof AwsServerlessDataflow>>(AwsServerlessDataflow, argv);
+    if (options.flags['update-readme.md']) {
+      OclifUtils.injectHelpTextIntoReadmeMd(this); // you need to have <!-- help start -->...<!-- help end --> in your README.md
+      return;
+    }
+    // You can add this in the scripts section of your package.json:  "preversion": "./bin/run --update-readme.md && git add README.md"
+
+    // ... other code ...
+  }
 }
+export = AwsServerlessDataflo
 ```
 
 You can either import and use the [class](#classes) as shown above,
 or you can import individual [functions](#variables) directly like below:
 
 ```javascript
-import { prependCliToExamples } from '@handy-common-utils/promise-utils';
+import { prependCliToExamples } from '@handy-common-utils/oclif-utils';
 ```
 
 # API
