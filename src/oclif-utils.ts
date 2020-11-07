@@ -48,7 +48,7 @@ export class OclifUtils {
   static prependCliToExamples(commandInstance: Command): void {
     const cmd = commandInstance.ctor as any as Config.Command.Class;
     if (Array.isArray(cmd.examples)) {  // so that we don't have to hard code command name in the examples
-      cmd.examples = cmd.examples.map(str => str.startsWith('^ ') ? str.replace(/\^/g, commandInstance.config.bin) : str);
+      cmd.examples = cmd.examples.map(str => str.startsWith('^ ') ? str.replace('^', commandInstance.config.bin) : str);
     }
   }
 
