@@ -6,15 +6,15 @@ import * as Parser from '@oclif/parser';
 
 export function getCommandConfig(commandInstance: Command): Config.Command {
   const cmd = Config.Command.toCached(commandInstance.ctor as any as Config.Command.Class);
-  if (cmd.id == null) {
+  if (cmd.id === undefined) {
     cmd.id = '';
   }
   return cmd;
 }
 
 class SingleCommandHelp extends Help {
-  constructor(protected commandInstance: Command, opts?: Partial<HelpOptions>) {
-    super(commandInstance.config, opts);
+  constructor(protected commandInstance: Command, options?: Partial<HelpOptions>) {
+    super(commandInstance.config, options);
   }
 
   generateHelpText() {
@@ -35,7 +35,7 @@ export interface OclifHelpContent {
 }
 
 export class OclifUtils {
-  public static getCommandConfig(commandInstance: Command): Config.Command {
+  static getCommandConfig(commandInstance: Command): Config.Command {
     return getCommandConfig(commandInstance);
   }
 
@@ -48,30 +48,30 @@ export class OclifUtils {
   static prependCliToExamples(commandInstance: Command): void {
     const cmd = commandInstance.ctor as any as Config.Command.Class;
     if (Array.isArray(cmd.examples)) {  // so that we don't have to hard code command name in the examples
-      cmd.examples = cmd.examples.map(str => str.startsWith('^ ') ? str.replace('^', commandInstance.config.bin) : str);
+      cmd.examples = cmd.examples.map(s => s.startsWith('^ ') ? s.replace('^', commandInstance.config.bin) : s);
     }
   }
 
   /**
    * Generate formatted text content of help to a command
    * @param commandInstance instance of the Command
-   * @param opts format options
+   * @param options format options
    * @return help content
    */
-  static generateHelpText(commandInstance: Command, opts?: Partial<HelpOptions>): string {
+  static generateHelpText(commandInstance: Command, options?: Partial<HelpOptions>): string {
     const help = new SingleCommandHelp(commandInstance, {
       stripAnsi: true,
       maxWidth: 80,
-      ...opts,
+      ...options,
     });
     return help.generateHelpText();
   }
 
-  static async injectHelpTextIntoReadmeMd(commandInstance: Command, opts?: Partial<HelpOptions>) {
+  static async injectHelpTextIntoReadmeMd(commandInstance: Command, options?: Partial<HelpOptions>) {
     const helpText = OclifUtils.generateHelpText(commandInstance, {
       stripAnsi: true,
       maxWidth: 80,
-      ...opts,
+      ...options,
     });
     const helpTextMd = '```\n' + helpText + '\n```\n';
 
@@ -82,11 +82,37 @@ export class OclifUtils {
     fileContent = fileContent.replace(new RegExp(`${helpStart}(.|\n)*${helpEnd}`, 'm'), `${helpStart}\n${helpTextMd}\n${helpEnd}`);
     await fs.outputFile(fileName, fileContent);
   }
+
+  static parseCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any}>(commandInstance: InstanceType<T>): CommandOptions<T> {
+    return Parser.parse(commandInstance.argv, { context: commandInstance, ...commandInstance.ctor });
+  }
+
+  static rebuildCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any}>(commandInstance: InstanceType<T>, options?: CommandOptions<T>): string {
+    if (options === undefined) {
+      options = OclifUtils.parseCommandLine(commandInstance);
+    }
+    let cli: string = commandInstance.config.bin;
+    if (options.argv?.length > 0) {
+      cli += ' ' + options.argv.join(' ');
+    }
+    if (options.flags) {
+      for (const flagName of Object.keys(options.flags)) {
+        const flag = options.flags[flagName];
+        cli += ' ';
+        cli += Array.isArray(flag) ?
+          flag.map(value => `--${flagName} '${value}'`).join(' ') :
+          `--${flagName} '${flag}'`;
+      }
+    }
+    return cli;
+  }
 }
 
 export const prependCliToExamples = OclifUtils.prependCliToExamples;
 export const generateHelpText = OclifUtils.generateHelpText;
 export const injectHelpTextIntoReadmeMd = OclifUtils.injectHelpTextIntoReadmeMd;
+export const parseCommandLine = OclifUtils.parseCommandLine;
+export const rebuildCommandLine = OclifUtils.rebuildCommandLine;
 
 export type CommandFlags<T> = T extends Parser.Input<infer F> ? F : never
 export type CommandArgNames<T> = T extends { name: infer A }[] ? A : never
