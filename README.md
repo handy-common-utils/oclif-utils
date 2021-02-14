@@ -99,11 +99,14 @@ import { prependCliToExamples } from '@handy-common-utils/oclif-utils';
 
 * [generateHelpText](#generatehelptext)
 * [injectHelpTextIntoReadmeMd](#injecthelptextintoreadmemd)
+* [parseCommandLine](#parsecommandline)
 * [prependCliToExamples](#prependclitoexamples)
+* [reconstructCommandLine](#reconstructcommandline)
 
 #### Functions
 
 * [getCommandConfig](#getcommandconfig)
+* [quoteIfNeeded](#quoteifneeded)
 
 ### Type aliases
 
@@ -167,9 +170,21 @@ ___
 
 ___
 
+#### parseCommandLine
+
+• `Const` **parseCommandLine**: [parseCommandLine](#parsecommandline) = OclifUtils.parseCommandLine
+
+___
+
 #### prependCliToExamples
 
 • `Const` **prependCliToExamples**: [prependCliToExamples](#prependclitoexamples) = OclifUtils.prependCliToExamples
+
+___
+
+#### reconstructCommandLine
+
+• `Const` **reconstructCommandLine**: [reconstructCommandLine](#reconstructcommandline) = OclifUtils.reconstructCommandLine
 
 ### Functions
 
@@ -184,6 +199,20 @@ Name | Type |
 `commandInstance` | Command |
 
 **Returns:** Command
+
+___
+
+#### quoteIfNeeded
+
+▸ `Const`**quoteIfNeeded**(`text`: any): string
+
+##### Parameters:
+
+Name | Type |
+------ | ------ |
+`text` | any |
+
+**Returns:** string
 
 ## Classes
 
@@ -207,13 +236,15 @@ Name | Type |
 * [generateHelpText](#generatehelptext)
 * [getCommandConfig](#getcommandconfig)
 * [injectHelpTextIntoReadmeMd](#injecthelptextintoreadmemd)
+* [parseCommandLine](#parsecommandline)
 * [prependCliToExamples](#prependclitoexamples)
+* [reconstructCommandLine](#reconstructcommandline)
 
 #### Methods
 
 ##### generateHelpText
 
-▸ `Static` **generateHelpText**(`commandInstance`: Command, `opts?`: Partial\<HelpOptions>): string
+▸ `Static` **generateHelpText**(`commandInstance`: Command, `options?`: Partial\<HelpOptions>): string
 
 Generate formatted text content of help to a command
 
@@ -222,7 +253,7 @@ Generate formatted text content of help to a command
 Name | Type | Description |
 ------ | ------ | ------ |
 `commandInstance` | Command | instance of the Command |
-`opts?` | Partial\<HelpOptions> | format options |
+`options?` | Partial\<HelpOptions> | format options |
 
 **Returns:** string
 
@@ -246,16 +277,36 @@ ___
 
 ##### injectHelpTextIntoReadmeMd
 
-▸ `Static` **injectHelpTextIntoReadmeMd**(`commandInstance`: Command, `opts?`: Partial\<HelpOptions>): Promise\<void>
+▸ `Static` **injectHelpTextIntoReadmeMd**(`commandInstance`: Command, `options?`: Partial\<HelpOptions>): Promise\<void>
 
 ###### Parameters:
 
 Name | Type |
 ------ | ------ |
 `commandInstance` | Command |
-`opts?` | Partial\<HelpOptions> |
+`options?` | Partial\<HelpOptions> |
 
 **Returns:** Promise\<void>
+
+___
+
+##### parseCommandLine
+
+▸ `Static` **parseCommandLine**\<T>(`commandInstance`: InstanceType\<T>): [CommandOptions](#commandoptions)\<T>
+
+###### Type parameters:
+
+Name | Type |
+------ | ------ |
+`T` | { constructor: (...args: any) => any ; args: Array\<{ name: string  }>  } |
+
+###### Parameters:
+
+Name | Type |
+------ | ------ |
+`commandInstance` | InstanceType\<T> |
+
+**Returns:** [CommandOptions](#commandoptions)\<T>
 
 ___
 
@@ -275,6 +326,31 @@ Name | Type | Description |
 **Returns:** void
 
 void
+
+___
+
+##### reconstructCommandLine
+
+▸ `Static` **reconstructCommandLine**\<T>(`commandInstance`: InstanceType\<T>, `options?`: [CommandOptions](#commandoptions)\<T>): string
+
+Reconstruct the command line from already parsed options.
+
+###### Type parameters:
+
+Name | Type |
+------ | ------ |
+`T` | { constructor: (...args: any) => any ; args: Array\<{ name: string  }>  } |
+
+###### Parameters:
+
+Name | Type | Description |
+------ | ------ | ------ |
+`commandInstance` | InstanceType\<T> | When calling from the subclass of `Command`, just pass `this` |
+`options?` | [CommandOptions](#commandoptions)\<T> | already parsed options |
+
+**Returns:** string
+
+the command line string corresponding to the parsed options
 
 
 <a name="classessinglecommandhelpmd"></a>
@@ -327,7 +403,7 @@ void
 
 ##### constructor
 
-\+ **new SingleCommandHelp**(`commandInstance`: Command, `opts?`: Partial\<HelpOptions>): [SingleCommandHelp](#classessinglecommandhelpmd)
+\+ **new SingleCommandHelp**(`commandInstance`: Command, `options?`: Partial\<HelpOptions>): [SingleCommandHelp](#classessinglecommandhelpmd)
 
 *Overrides void*
 
@@ -336,7 +412,7 @@ void
 Name | Type |
 ------ | ------ |
 `commandInstance` | Command |
-`opts?` | Partial\<HelpOptions> |
+`options?` | Partial\<HelpOptions> |
 
 **Returns:** [SingleCommandHelp](#classessinglecommandhelpmd)
 
