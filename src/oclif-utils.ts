@@ -34,6 +34,13 @@ export interface OclifHelpContent {
   examples?: string;
 }
 
+const quoteIfNeeded = (text: any) => {
+  if (typeof text !== 'string' || /^[\d+,A-Za-z-]+$/.test(text)) {
+    return `${text}`;
+  }
+  return `'${text}'`;
+};
+
 export class OclifUtils {
   static getCommandConfig(commandInstance: Command): Config.Command {
     return getCommandConfig(commandInstance);
@@ -87,24 +94,32 @@ export class OclifUtils {
     return Parser.parse(commandInstance.argv, { context: commandInstance, ...commandInstance.ctor });
   }
 
-  static rebuildCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any}>(commandInstance: InstanceType<T>, options?: CommandOptions<T>): string {
+  static reconstructCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any}>(commandInstance: InstanceType<T>, options?: CommandOptions<T>): string {
     if (options === undefined) {
       options = OclifUtils.parseCommandLine(commandInstance);
     }
-    let cli: string = commandInstance.config.bin;
+    const args = new Array<string>();
+    args.push(commandInstance.config.bin);
     if (options.argv?.length > 0) {
-      cli += ' ' + options.argv.join(' ');
+      args.push(...options.argv.map(x => quoteIfNeeded(x)));
     }
     if (options.flags) {
       for (const flagName of Object.keys(options.flags)) {
-        const flag = options.flags[flagName];
-        cli += ' ';
-        cli += Array.isArray(flag) ?
-          flag.map(value => `--${flagName} '${value}'`).join(' ') :
-          `--${flagName} '${flag}'`;
+        const flagValue = options.flags[flagName];
+        if (flagValue !== false) {  // no need if the flag is not toggled on
+          args.push(`--${flagName}`);
+          if (typeof flagValue !== 'boolean') {
+            // eslint-disable-next-line max-depth
+            if (Array.isArray(flagValue)) {
+              flagValue.forEach(value => args.push(`${quoteIfNeeded(value)}`));
+            } else {
+              args.push(`${quoteIfNeeded(flagValue)}`);
+            }
+          }
+        }
       }
     }
-    return cli;
+    return args.join(' ');
   }
 }
 
@@ -112,7 +127,7 @@ export const prependCliToExamples = OclifUtils.prependCliToExamples;
 export const generateHelpText = OclifUtils.generateHelpText;
 export const injectHelpTextIntoReadmeMd = OclifUtils.injectHelpTextIntoReadmeMd;
 export const parseCommandLine = OclifUtils.parseCommandLine;
-export const rebuildCommandLine = OclifUtils.rebuildCommandLine;
+export const reconstructCommandLine = OclifUtils.reconstructCommandLine;
 
 export type CommandFlags<T> = T extends Parser.Input<infer F> ? F : never
 export type CommandArgNames<T> = T extends { name: infer A }[] ? A : never
