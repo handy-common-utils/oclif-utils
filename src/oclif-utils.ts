@@ -94,6 +94,12 @@ export class OclifUtils {
     return Parser.parse(commandInstance.argv, { context: commandInstance, ...commandInstance.ctor });
   }
 
+  /**
+   * Reconstruct the command line from already parsed options.
+   * @param commandInstance When calling from the subclass of `Command`, just pass `this`
+   * @param options already parsed options
+   * @returns the command line string corresponding to the parsed options
+   */
   static reconstructCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any}>(commandInstance: InstanceType<T>, options?: CommandOptions<T>): string {
     if (options === undefined) {
       options = OclifUtils.parseCommandLine(commandInstance);

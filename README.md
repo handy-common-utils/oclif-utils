@@ -48,6 +48,9 @@ class AwsServerlessDataflow extends Command {
       OclifUtils.injectHelpTextIntoReadmeMd(this); // you need to have <!-- help start -->...<!-- help end --> in your README.md
       return;
     }
+    // This would be helpful if a complex command line needs to be shared
+    console.log(`Command line: ${OclifUtils.reconstructedcommandLine(this, options)}`);
+
     // You can add this in the scripts section of your package.json:  "preversion": "./bin/run --update-readme.md && git add README.md"
 
     // ... other code ...
