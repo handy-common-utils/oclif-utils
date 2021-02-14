@@ -60,7 +60,7 @@ It generates website files locally and can optionally launch a local server for 
     }
     */
 
-    const commandLine = OclifUtils.rebuildCommandLine(this);
+    const commandLine = OclifUtils.reconstructCommandLine(this);
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     testResultCommandLine = commandLine;
   }
@@ -100,7 +100,7 @@ describe('OclifUtils', () => {
   it('should rebuildCommandLine(...) work', async () => {
     await TestCommand.run([
       'api-doc',
-      '8',
+      '8 and eight',
       '-l',
       '10',
       '-i',
@@ -111,6 +111,6 @@ describe('OclifUtils', () => {
       'abc and d',
       '--server',
     ]);
-    expect(testResultCommandLine).to.eq("@handy-common-utils/oclif-utils api-doc 8 --parallelism '10' --include '*xyz*' --include 'abc and d' --exclude 'x1' --server 'true' --cloud-formation 'false' --port '8002'");
+    expect(testResultCommandLine).to.eq("@handy-common-utils/oclif-utils api-doc '8 and eight' --parallelism 10 --include '*xyz*' 'abc and d' --exclude x1 --server --port 8002");
   });
 });
