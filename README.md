@@ -7,7 +7,7 @@ oclif (https://oclif.io/) related utilities
 With this utility library, you will be able to:
 
 * Make type information of `options.args` available
-* `./bin/run --update-readme.md` can update README file with properly formated CLI manual information
+* Update README.md file by `./bin/run --update-readme.md` for inserting properly formated CLI manual information
 * Prepend command line name to the examples
 * Reconstruct the full command line as a string
 
