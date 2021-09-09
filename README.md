@@ -92,191 +92,243 @@ import { prependCliToExamples } from '@handy-common-utils/oclif-utils';
 <!-- API start -->
 <a name="readmemd"></a>
 
-**[@handy-common-utils/oclif-utils](#readmemd)**
-
-> Globals
+@handy-common-utils/oclif-utils
 
 ## @handy-common-utils/oclif-utils
 
-### Index
+### Table of contents
 
 #### Classes
 
-* [OclifUtils](#classesoclifutilsmd)
-* [SingleCommandHelp](#classessinglecommandhelpmd)
+- [OclifUtils](#classesoclifutilsmd)
 
 #### Interfaces
 
-* [OclifHelpContent](#interfacesoclifhelpcontentmd)
+- [OclifHelpContent](#interfacesoclifhelpcontentmd)
 
 #### Type aliases
 
-* [CommandArgNames](#commandargnames)
-* [CommandArgs](#commandargs)
-* [CommandFlags](#commandflags)
-* [CommandOptions](#commandoptions)
-
-#### Variables
-
-* [generateHelpText](#generatehelptext)
-* [injectHelpTextIntoReadmeMd](#injecthelptextintoreadmemd)
-* [parseCommandLine](#parsecommandline)
-* [prependCliToExamples](#prependclitoexamples)
-* [reconstructCommandLine](#reconstructcommandline)
+- [CommandArgNames](#commandargnames)
+- [CommandArgs](#commandargs)
+- [CommandFlags](#commandflags)
+- [CommandOptions](#commandoptions)
 
 #### Functions
 
-* [getCommandConfig](#getcommandconfig)
-* [quoteIfNeeded](#quoteifneeded)
+- [generateHelpText](#generatehelptext)
+- [getCommandConfig](#getcommandconfig)
+- [injectHelpTextIntoReadmeMd](#injecthelptextintoreadmemd)
+- [parseCommandLine](#parsecommandline)
+- [prependCliToExamples](#prependclitoexamples)
+- [reconstructCommandLine](#reconstructcommandline)
 
 ### Type aliases
 
 #### CommandArgNames
 
-Ƭ  **CommandArgNames**\<T>: T *extends* { name: *infer* A  }[] ? A : never
+Ƭ **CommandArgNames**<`T`\>: `T` extends { `name`: infer A  }[] ? `A` : `never`
 
-##### Type parameters:
+##### Type parameters
 
-Name |
------- |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 ___
 
 #### CommandArgs
 
-Ƭ  **CommandArgs**\<T>: {}
+Ƭ **CommandArgs**<`T`\>: { [x in CommandArgNames<T["args"]\>]: string}
 
-##### Type parameters:
+##### Type parameters
 
-Name | Type |
------- | ------ |
-`T` | { args: Array\<{ name: string  }>  } |
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
 
 ___
 
 #### CommandFlags
 
-Ƭ  **CommandFlags**\<T>: T *extends* Parser.Input\<*infer* F> ? F : never
+Ƭ **CommandFlags**<`T`\>: `T` extends `Parser.Input`<infer F\> ? `F` : `never`
 
-##### Type parameters:
+##### Type parameters
 
-Name |
------- |
-`T` |
+| Name |
+| :------ |
+| `T` |
 
 ___
 
 #### CommandOptions
 
-Ƭ  **CommandOptions**\<T>: Parser.Output\<[CommandFlags](#commandflags)\<T>, [CommandArgs](#commandargs)\<T>>
+Ƭ **CommandOptions**<`T`\>: `Parser.Output`<[`CommandFlags`](#commandflags)<`T`\>, [`CommandArgs`](#commandargs)<`T`\>\>
 
-##### Type parameters:
+##### Type parameters
 
-Name | Type |
------- | ------ |
-`T` | { args: Array\<{ name: string  }>  } |
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
 
-### Variables
+### Functions
 
 #### generateHelpText
 
-• `Const` **generateHelpText**: [generateHelpText](#generatehelptext) = OclifUtils.generateHelpText
+▸ `Const` **generateHelpText**(`commandInstance`, `options?`): `string`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `commandInstance` | `default` |
+| `options?` | `Partial`<`HelpOptions`\> |
+
+##### Returns
+
+`string`
+
+___
+
+#### getCommandConfig
+
+▸ **getCommandConfig**(`commandInstance`): `Config.Command`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `commandInstance` | `Command` |
+
+##### Returns
+
+`Config.Command`
 
 ___
 
 #### injectHelpTextIntoReadmeMd
 
-• `Const` **injectHelpTextIntoReadmeMd**: [injectHelpTextIntoReadmeMd](#injecthelptextintoreadmemd) = OclifUtils.injectHelpTextIntoReadmeMd
+▸ `Const` **injectHelpTextIntoReadmeMd**(`commandInstance`, `options?`): `Promise`<`void`\>
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `commandInstance` | `default` |
+| `options?` | `Partial`<`HelpOptions`\> |
+
+##### Returns
+
+`Promise`<`void`\>
 
 ___
 
 #### parseCommandLine
 
-• `Const` **parseCommandLine**: [parseCommandLine](#parsecommandline) = OclifUtils.parseCommandLine
+▸ `Const` **parseCommandLine**<`T`\>(`commandInstance`): [`CommandOptions`](#commandoptions)<`T`\>
+
+##### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `commandInstance` | `InstanceType`<`T`\> |
+
+##### Returns
+
+[`CommandOptions`](#commandoptions)<`T`\>
 
 ___
 
 #### prependCliToExamples
 
-• `Const` **prependCliToExamples**: [prependCliToExamples](#prependclitoexamples) = OclifUtils.prependCliToExamples
+▸ `Const` **prependCliToExamples**(`commandInstance`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `commandInstance` | `default` |
+
+##### Returns
+
+`void`
 
 ___
 
 #### reconstructCommandLine
 
-• `Const` **reconstructCommandLine**: [reconstructCommandLine](#reconstructcommandline) = OclifUtils.reconstructCommandLine
+▸ `Const` **reconstructCommandLine**<`T`\>(`commandInstance`, `options?`): `string`
 
-### Functions
+##### Type parameters
 
-#### getCommandConfig
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
 
-▸ **getCommandConfig**(`commandInstance`: Command): Command
+##### Parameters
 
-##### Parameters:
+| Name | Type |
+| :------ | :------ |
+| `commandInstance` | `InstanceType`<`T`\> |
+| `options?` | [`CommandOptions`](#commandoptions)<`T`\> |
 
-Name | Type |
------- | ------ |
-`commandInstance` | Command |
+##### Returns
 
-**Returns:** Command
-
-___
-
-#### quoteIfNeeded
-
-▸ `Const`**quoteIfNeeded**(`text`: any): string
-
-##### Parameters:
-
-Name | Type |
------- | ------ |
-`text` | any |
-
-**Returns:** string
+`string`
 
 ## Classes
 
 
 <a name="classesoclifutilsmd"></a>
 
-**[@handy-common-utils/oclif-utils](#readmemd)**
-
-> [Globals](#readmemd) / OclifUtils
+[@handy-common-utils/oclif-utils](#readmemd) / OclifUtils
 
 ### Class: OclifUtils
 
-#### Hierarchy
+#### Table of contents
 
-* **OclifUtils**
+##### Constructors
 
-#### Index
+- [constructor](#constructor)
 
 ##### Methods
 
-* [generateHelpText](#generatehelptext)
-* [getCommandConfig](#getcommandconfig)
-* [injectHelpTextIntoReadmeMd](#injecthelptextintoreadmemd)
-* [parseCommandLine](#parsecommandline)
-* [prependCliToExamples](#prependclitoexamples)
-* [reconstructCommandLine](#reconstructcommandline)
+- [generateHelpText](#generatehelptext)
+- [getCommandConfig](#getcommandconfig)
+- [injectHelpTextIntoReadmeMd](#injecthelptextintoreadmemd)
+- [parseCommandLine](#parsecommandline)
+- [prependCliToExamples](#prependclitoexamples)
+- [reconstructCommandLine](#reconstructcommandline)
+
+#### Constructors
+
+##### constructor
+
+• **new OclifUtils**()
 
 #### Methods
 
 ##### generateHelpText
 
-▸ `Static` **generateHelpText**(`commandInstance`: Command, `options?`: Partial\<HelpOptions>): string
+▸ `Static` **generateHelpText**(`commandInstance`, `options?`): `string`
 
 Generate formatted text content of help to a command
 
-###### Parameters:
+###### Parameters
 
-Name | Type | Description |
------- | ------ | ------ |
-`commandInstance` | Command | instance of the Command |
-`options?` | Partial\<HelpOptions> | format options |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `commandInstance` | `default` | instance of the Command |
+| `options?` | `Partial`<`HelpOptions`\> | format options |
 
-**Returns:** string
+###### Returns
+
+`string`
 
 help content
 
@@ -284,67 +336,75 @@ ___
 
 ##### getCommandConfig
 
-▸ `Static` **getCommandConfig**(`commandInstance`: Command): Command
+▸ `Static` **getCommandConfig**(`commandInstance`): `Command`
 
-###### Parameters:
+###### Parameters
 
-Name | Type |
------- | ------ |
-`commandInstance` | Command |
+| Name | Type |
+| :------ | :------ |
+| `commandInstance` | `default` |
 
-**Returns:** Command
+###### Returns
+
+`Command`
 
 ___
 
 ##### injectHelpTextIntoReadmeMd
 
-▸ `Static` **injectHelpTextIntoReadmeMd**(`commandInstance`: Command, `options?`: Partial\<HelpOptions>): Promise\<void>
+▸ `Static` **injectHelpTextIntoReadmeMd**(`commandInstance`, `options?`): `Promise`<`void`\>
 
-###### Parameters:
+###### Parameters
 
-Name | Type |
------- | ------ |
-`commandInstance` | Command |
-`options?` | Partial\<HelpOptions> |
+| Name | Type |
+| :------ | :------ |
+| `commandInstance` | `default` |
+| `options?` | `Partial`<`HelpOptions`\> |
 
-**Returns:** Promise\<void>
+###### Returns
+
+`Promise`<`void`\>
 
 ___
 
 ##### parseCommandLine
 
-▸ `Static` **parseCommandLine**\<T>(`commandInstance`: InstanceType\<T>): [CommandOptions](#commandoptions)\<T>
+▸ `Static` **parseCommandLine**<`T`\>(`commandInstance`): [`CommandOptions`](#commandoptions)<`T`\>
 
-###### Type parameters:
+###### Type parameters
 
-Name | Type |
------- | ------ |
-`T` | { constructor: (...args: any) => any ; args: Array\<{ name: string  }>  } |
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
 
-###### Parameters:
+###### Parameters
 
-Name | Type |
------- | ------ |
-`commandInstance` | InstanceType\<T> |
+| Name | Type |
+| :------ | :------ |
+| `commandInstance` | `InstanceType`<`T`\> |
 
-**Returns:** [CommandOptions](#commandoptions)\<T>
+###### Returns
+
+[`CommandOptions`](#commandoptions)<`T`\>
 
 ___
 
 ##### prependCliToExamples
 
-▸ `Static` **prependCliToExamples**(`commandInstance`: Command): void
+▸ `Static` **prependCliToExamples**(`commandInstance`): `void`
 
 Use this function to prepend command line to examples.
 This function needs to be called from `init()` function of the Command.
 
-###### Parameters:
+###### Parameters
 
-Name | Type | Description |
------- | ------ | ------ |
-`commandInstance` | Command | instance of the Command |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `commandInstance` | `default` | instance of the Command |
 
-**Returns:** void
+###### Returns
+
+`void`
 
 void
 
@@ -352,364 +412,82 @@ ___
 
 ##### reconstructCommandLine
 
-▸ `Static` **reconstructCommandLine**\<T>(`commandInstance`: InstanceType\<T>, `options?`: [CommandOptions](#commandoptions)\<T>): string
+▸ `Static` **reconstructCommandLine**<`T`\>(`commandInstance`, `options?`): `string`
 
 Reconstruct the command line from already parsed options.
 
-###### Type parameters:
+###### Type parameters
 
-Name | Type |
------- | ------ |
-`T` | { constructor: (...args: any) => any ; args: Array\<{ name: string  }>  } |
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
 
-###### Parameters:
+###### Parameters
 
-Name | Type | Description |
------- | ------ | ------ |
-`commandInstance` | InstanceType\<T> | When calling from the subclass of `Command`, just pass `this` |
-`options?` | [CommandOptions](#commandoptions)\<T> | already parsed options |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `commandInstance` | `InstanceType`<`T`\> | When calling from the subclass of `Command`, just pass `this` |
+| `options?` | [`CommandOptions`](#commandoptions)<`T`\> | already parsed options |
 
-**Returns:** string
+###### Returns
+
+`string`
 
 the command line string corresponding to the parsed options
-
-
-<a name="classessinglecommandhelpmd"></a>
-
-**[@handy-common-utils/oclif-utils](#readmemd)**
-
-> [Globals](#readmemd) / SingleCommandHelp
-
-### Class: SingleCommandHelp
-
-#### Hierarchy
-
-* Help
-
-  ↳ **SingleCommandHelp**
-
-#### Index
-
-##### Constructors
-
-* [constructor](#constructor)
-
-##### Properties
-
-* [commandInstance](#commandinstance)
-* [config](#config)
-* [opts](#opts)
-* [render](#render)
-
-##### Accessors
-
-* [sortedCommands](#sortedcommands)
-* [sortedTopics](#sortedtopics)
-
-##### Methods
-
-* [command](#command)
-* [formatCommand](#formatcommand)
-* [formatCommands](#formatcommands)
-* [formatRoot](#formatroot)
-* [formatTopic](#formattopic)
-* [formatTopics](#formattopics)
-* [generateHelpText](#generatehelptext)
-* [showCommandHelp](#showcommandhelp)
-* [showHelp](#showhelp)
-* [showRootHelp](#showroothelp)
-* [showTopicHelp](#showtopichelp)
-
-#### Constructors
-
-##### constructor
-
-\+ **new SingleCommandHelp**(`commandInstance`: Command, `options?`: Partial\<HelpOptions>): [SingleCommandHelp](#classessinglecommandhelpmd)
-
-*Overrides void*
-
-###### Parameters:
-
-Name | Type |
------- | ------ |
-`commandInstance` | Command |
-`options?` | Partial\<HelpOptions> |
-
-**Returns:** [SingleCommandHelp](#classessinglecommandhelpmd)
-
-#### Properties
-
-##### commandInstance
-
-• `Protected` **commandInstance**: Command
-
-___
-
-##### config
-
-• `Protected` **config**: IConfig
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[config](#config)*
-
-___
-
-##### opts
-
-• `Protected` **opts**: HelpOptions
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[opts](#opts)*
-
-___
-
-##### render
-
-•  **render**: (input: string) => string
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[render](#render)*
-
-#### Accessors
-
-##### sortedCommands
-
-• `Protected`get **sortedCommands**(): Plugin[]
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[sortedCommands](#sortedcommands)*
-
-**Returns:** Plugin[]
-
-___
-
-##### sortedTopics
-
-• `Protected`get **sortedTopics**(): Topic[]
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[sortedTopics](#sortedtopics)*
-
-**Returns:** Topic[]
-
-#### Methods
-
-##### command
-
-▸ `Protected`**command**(`command`: Command): string
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[command](#command)*
-
-**`deprecated`** used for readme generation
-
-###### Parameters:
-
-Name | Type | Description |
------- | ------ | ------ |
-`command` | Command | The command to generate readme help for |
-
-**Returns:** string
-
-the readme help string for the given command
-
-___
-
-##### formatCommand
-
-▸ `Protected`**formatCommand**(`command`: Command): string
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[formatCommand](#formatcommand)*
-
-###### Parameters:
-
-Name | Type |
------- | ------ |
-`command` | Command |
-
-**Returns:** string
-
-___
-
-##### formatCommands
-
-▸ `Protected`**formatCommands**(`commands`: Command[]): string
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[formatCommands](#formatcommands)*
-
-###### Parameters:
-
-Name | Type |
------- | ------ |
-`commands` | Command[] |
-
-**Returns:** string
-
-___
-
-##### formatRoot
-
-▸ `Protected`**formatRoot**(): string
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[formatRoot](#formatroot)*
-
-**Returns:** string
-
-___
-
-##### formatTopic
-
-▸ `Protected`**formatTopic**(`topic`: Topic): string
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[formatTopic](#formattopic)*
-
-###### Parameters:
-
-Name | Type |
------- | ------ |
-`topic` | Topic |
-
-**Returns:** string
-
-___
-
-##### formatTopics
-
-▸ `Protected`**formatTopics**(`topics`: Topic[]): string
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[formatTopics](#formattopics)*
-
-###### Parameters:
-
-Name | Type |
------- | ------ |
-`topics` | Topic[] |
-
-**Returns:** string
-
-___
-
-##### generateHelpText
-
-▸ **generateHelpText**(): string
-
-**Returns:** string
-
-___
-
-##### showCommandHelp
-
-▸ **showCommandHelp**(`command`: Command): void
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[showCommandHelp](#showcommandhelp)*
-
-*Overrides void*
-
-###### Parameters:
-
-Name | Type |
------- | ------ |
-`command` | Command |
-
-**Returns:** void
-
-___
-
-##### showHelp
-
-▸ **showHelp**(`argv`: string[]): void
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[showHelp](#showhelp)*
-
-*Overrides void*
-
-###### Parameters:
-
-Name | Type |
------- | ------ |
-`argv` | string[] |
-
-**Returns:** void
-
-___
-
-##### showRootHelp
-
-▸ `Protected`**showRootHelp**(): void
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[showRootHelp](#showroothelp)*
-
-**Returns:** void
-
-___
-
-##### showTopicHelp
-
-▸ `Protected`**showTopicHelp**(`topic`: Topic): void
-
-*Inherited from [SingleCommandHelp](#classessinglecommandhelpmd).[showTopicHelp](#showtopichelp)*
-
-###### Parameters:
-
-Name | Type |
------- | ------ |
-`topic` | Topic |
-
-**Returns:** void
 
 ## Interfaces
 
 
 <a name="interfacesoclifhelpcontentmd"></a>
 
-**[@handy-common-utils/oclif-utils](#readmemd)**
-
-> [Globals](#readmemd) / OclifHelpContent
+[@handy-common-utils/oclif-utils](#readmemd) / OclifHelpContent
 
 ### Interface: OclifHelpContent
 
-#### Hierarchy
-
-* **OclifHelpContent**
-
-#### Index
+#### Table of contents
 
 ##### Properties
 
-* [aliases](#aliases)
-* [args](#args)
-* [description](#description)
-* [examples](#examples)
-* [flags](#flags)
-* [usage](#usage)
+- [aliases](#aliases)
+- [args](#args)
+- [description](#description)
+- [examples](#examples)
+- [flags](#flags)
+- [usage](#usage)
 
 #### Properties
 
 ##### aliases
 
-• `Optional` **aliases**: undefined \| string
+• `Optional` **aliases**: `string`
 
 ___
 
 ##### args
 
-• `Optional` **args**: undefined \| string
+• `Optional` **args**: `string`
 
 ___
 
 ##### description
 
-• `Optional` **description**: undefined \| string
+• `Optional` **description**: `string`
 
 ___
 
 ##### examples
 
-• `Optional` **examples**: undefined \| string
+• `Optional` **examples**: `string`
 
 ___
 
 ##### flags
 
-• `Optional` **flags**: undefined \| string
+• `Optional` **flags**: `string`
 
 ___
 
 ##### usage
 
-• `Optional` **usage**: undefined \| string
+• `Optional` **usage**: `string`
 <!-- API end -->
