@@ -2,6 +2,15 @@
 
 oclif (https://oclif.io/) related utilities
 
+## Features
+
+With this utility library, you will be able to:
+
+* Make type information of `options.args` available
+* `./bin/run --update-readme.md` can update README file with properly formated CLI manual information
+* Prepend command line name to the examples
+* Reconstruct the full command line as a string
+
 ## How to use
 
 First add it as a dependency:
@@ -13,7 +22,8 @@ npm install @handy-common-utils/oclif-utils
 Then you can use it in the code:
 
 ```javascript
-import { OclifUtils } from '@handy-common-utils/oclif-utils';
+import { Command, flags } from '@oclif/command';
+import { CommandArgs, CommandFlags, CommandOptions, OclifUtils } from '@handy-common-utils/oclif-utils';
 
 class AwsServerlessDataflow extends Command {
   // You can use "typeof AwsServerlessDataflow.Options" in other places to refer to the type
@@ -25,8 +35,14 @@ class AwsServerlessDataflow extends Command {
     version: flags.version({ char: 'v' }),
     help: flags.help({ char: 'h' }),
     'update-readme.md': flags.boolean({ hidden: true, description: 'For developers only, don\'t use' }),
+    debug: flags.boolean({ char: 'd', name: 'debug' }),
     // ... other code ...
   }
+
+  static args = [
+    { name: 'path' as const, default: 'dataflow', description: 'path for putting generated website files' },
+    //             ^----- this is needed for the "path" property of options.args to be known to the compiler
+  ];
 
   static examples = [
     '^ -r ap-southeast-2 -s',
@@ -37,26 +53,31 @@ class AwsServerlessDataflow extends Command {
       -x '*lead-scor*' -x '*LeadCapture*' -c`,
   ];
 
-  protected async init() {
+  protected async init(): Promise<any> {
     OclifUtils.prependCliToExamples(this);  // "^" at the beginning of the examples will be replaced by the actual command
     return super.init();
   }
 
-  async run(argv?: string[]) {
+  async run(argv?: string[]): Promise<void> {
     const options = this.parse<CommandFlags<typeof AwsServerlessDataflow>, CommandArgs<typeof AwsServerlessDataflow>>(AwsServerlessDataflow, argv);
     if (options.flags['update-readme.md']) {
       OclifUtils.injectHelpTextIntoReadmeMd(this); // you need to have <!-- help start -->...<!-- help end --> in your README.md
       return;
     }
     // This would be helpful if a complex command line needs to be shared
-    console.log(`Command line: ${OclifUtils.reconstructedcommandLine(this, options)}`);
+    if (options.flags.debug) {
+      console.log(`Command line: ${OclifUtils.reconstructCommandLine(this, options)}`);
+    }
+
+    // Now the compiler knows that options.args has a property named "path"
+    console.log(options.args.path);
 
     // You can add this in the scripts section of your package.json:  "preversion": "./bin/run --update-readme.md && git add README.md"
 
     // ... other code ...
   }
 }
-export = AwsServerlessDataflo
+export = AwsServerlessDataflow
 ```
 
 You can either import and use the [class](#classes) as shown above,
