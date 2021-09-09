@@ -1,4 +1,6 @@
+/* eslint-disable no-use-before-define */
 import { Command, flags } from '@oclif/command';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { OclifUtils, CommandOptions } from '../src/oclif-utils';
 import { expect } from 'chai';
 

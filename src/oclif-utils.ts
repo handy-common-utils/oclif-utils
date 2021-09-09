@@ -1,6 +1,9 @@
+/* eslint-disable max-depth */
 import * as fs from 'fs-extra';
 import * as Config from '@oclif/config';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Command } from '@oclif/command';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HelpOptions, Help } from '@oclif/plugin-help';
 import * as Parser from '@oclif/parser';
 
@@ -41,6 +44,7 @@ const quoteIfNeeded = (text: any) => {
   return `'${text}'`;
 };
 
+// eslint-disable-next-line unicorn/no-static-only-class
 export class OclifUtils {
   static getCommandConfig(commandInstance: Command): Config.Command {
     return getCommandConfig(commandInstance);
@@ -74,7 +78,7 @@ export class OclifUtils {
     return help.generateHelpText();
   }
 
-  static async injectHelpTextIntoReadmeMd(commandInstance: Command, options?: Partial<HelpOptions>) {
+  static async injectHelpTextIntoReadmeMd(commandInstance: Command, options?: Partial<HelpOptions>): Promise<void> {
     const helpText = OclifUtils.generateHelpText(commandInstance, {
       stripAnsi: true,
       maxWidth: 80,
@@ -115,9 +119,10 @@ export class OclifUtils {
         if (flagValue !== false) {  // no need if the flag is not toggled on
           args.push(`--${flagName}`);
           if (typeof flagValue !== 'boolean') {
-            // eslint-disable-next-line max-depth
             if (Array.isArray(flagValue)) {
-              flagValue.forEach(value => args.push(`${quoteIfNeeded(value)}`));
+              for (const value of flagValue) {
+                args.push(`${quoteIfNeeded(value)}`);
+              }
             } else {
               args.push(`${quoteIfNeeded(flagValue)}`);
             }

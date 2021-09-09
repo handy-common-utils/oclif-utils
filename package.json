@@ -19,13 +19,12 @@
     "@handy-common-utils/promise-utils": "^1.0.5",
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
-    "@oclif/plugin-help": "^3.2.0",
+    "@oclif/plugin-help": "^3.2.3",
     "fs-extra": "^9.0.1"
   },
   "devDependencies": {
-    "@handy-common-utils/dev-dependencies": "^1.0.12",
-    "@types/fs-extra": "^8.1.1",
-    "es-check": "^5.1.2"
+    "@handy-common-utils/dev-dependencies": "^1.0.19",
+    "@types/fs-extra": "^8.1.1"
   },
   "publishConfig": {
     "access": "public"
