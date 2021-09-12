@@ -6,6 +6,7 @@ import { Command } from '@oclif/command';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { HelpOptions, Help } from '@oclif/plugin-help';
 import * as Parser from '@oclif/parser';
+import { CliConsole } from './cli-console';
 
 export function getCommandConfig(commandInstance: Command): Config.Command {
   const cmd = Config.Command.toCached(commandInstance.ctor as any as Config.Command.Class);
@@ -146,3 +147,30 @@ export type CommandArgs<T extends { args: Array<{ name: string }> }> = {
   [x in CommandArgNames<T['args']>]: string;
 }
 export type CommandOptions<T extends { args: Array<{ name: string }> }> = Parser.Output<CommandFlags<T>, CommandArgs<T>>
+
+/**
+ * Build an encapsulation of console output functions with console.log/info/warn/error.
+ * @param flags           The flag object that contains fields for knowning whether debug is enabled and whether quiet mode is enabled.
+ * Those fields are evaluated only once within the function.
+ * They are not evaluated when debug/info/warn/error functions are called.
+ * @param debugFlagName   Name of the debug field in the flags object
+ * @param quietFlagName   Name of the quiet field in the flags object
+ * @returns An CliConsole instance that uses console.log/info/warn/error.
+ */
+export const cliConsole = CliConsole.default;
+
+/**
+ * Build an encapsulation of console output functions with console.log/info/warn/error and chalk/colors/cli-color.
+ * @param flags           The flag object that contains fields for knowning whether debug is enabled and whether quiet mode is enabled.
+ * Those fields are evaluated only once within the function.
+ * They are not evaluated when debug/info/warn/error functions are called.
+ * @param colourer              Supplier of the colouring function, such as chalk or colors or cli-color
+ * @param debugColourFuncName   Name of the function within colourer that will be used to add colour to debug messages, or null if colouring is not desired.
+ * @param infoColourFuncName    Name of the function within colourer that will be used to add colour to info messages, or null if colouring is not desired.
+ * @param warnColourFuncName    Name of the function within colourer that will be used to add colour to warn messages, or null if colouring is not desired.
+ * @param errorColourFuncName   Name of the function within colourer that will be used to add colour to error messages, or null if colouring is not desired.
+ * @param debugFlagName   Name of the debug field in the flags object
+ * @param quietFlagName   Name of the quiet field in the flags object
+ * @returns An CliConsole instance that uses console.log/info/warn/error and also adds colour to the messages using chalk/colors/cli-color.
+ */
+export const cliConsoleWithColour = CliConsole.withColour;
