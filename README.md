@@ -101,6 +101,7 @@ import { prependCliToExamples } from '@handy-common-utils/oclif-utils';
 #### Modules
 
 - [cli-console](#modulescli_consolemd)
+- [index](#modulesindexmd)
 - [oclif-utils](#modulesoclif_utilsmd)
 
 ## Classes
@@ -228,7 +229,7 @@ ___
 
 ##### default
 
-▸ `Static` **default**<`FLAGS`\>(`flags`, `debugFlagName?`, `quietFlagName?`): [`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
+▸ `Static` **default**<`FLAGS`\>(`flags`, `debugFlagName?`, `quietFlagName?`): `CliConsole`<`fn`, `fn`, `fn`, `fn`\>
 
 Build an instance with console.log/info/warn/error.
 
@@ -248,7 +249,7 @@ Build an instance with console.log/info/warn/error.
 
 ###### Returns
 
-[`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
+`CliConsole`<`fn`, `fn`, `fn`, `fn`\>
 
 An instance that uses console.log/info/warn/error.
 
@@ -256,7 +257,7 @@ ___
 
 ##### withColour
 
-▸ `Static` **withColour**<`FLAGS`, `COLOURER`\>(`flags`, `colourer`, `debugColourFuncName?`, `infoColourFuncName?`, `warnColourFuncName?`, `errorColourFuncName?`, `debugFlagName?`, `quietFlagName?`): [`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
+▸ `Static` **withColour**<`FLAGS`, `COLOURER`\>(`flags`, `colourer`, `debugColourFuncName?`, `infoColourFuncName?`, `warnColourFuncName?`, `errorColourFuncName?`, `debugFlagName?`, `quietFlagName?`): `CliConsole`<`fn`, `fn`, `fn`, `fn`\>
 
 Build an instance with console.log/info/warn/error and chalk/colors/cli-color.
 
@@ -282,7 +283,7 @@ Build an instance with console.log/info/warn/error and chalk/colors/cli-color.
 
 ###### Returns
 
-[`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
+`CliConsole`<`fn`, `fn`, `fn`, `fn`\>
 
 An instance that uses console.log/info/warn/error and also adds colour to the messages using chalk/colors/cli-color.
 
@@ -374,7 +375,7 @@ ___
 
 ##### parseCommandLine
 
-▸ `Static` **parseCommandLine**<`T`\>(`commandInstance`): [`CommandOptions`](#commandoptions)<`T`\>
+▸ `Static` **parseCommandLine**<`T`\>(`commandInstance`): `CommandOptions`<`T`\>
 
 ###### Type parameters
 
@@ -390,7 +391,7 @@ ___
 
 ###### Returns
 
-[`CommandOptions`](#commandoptions)<`T`\>
+`CommandOptions`<`T`\>
 
 ___
 
@@ -432,7 +433,7 @@ Reconstruct the command line from already parsed options.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `commandInstance` | `InstanceType`<`T`\> | When calling from the subclass of `Command`, just pass `this` |
-| `options?` | [`CommandOptions`](#commandoptions)<`T`\> | already parsed options |
+| `options?` | `CommandOptions`<`T`\> | already parsed options |
 
 ###### Returns
 
@@ -517,11 +518,87 @@ ___
 
 - [DefaultCliConsole](#defaultcliconsole)
 
+##### Functions
+
+- [cliConsole](#cliconsole)
+- [cliConsoleWithColour](#cliconsolewithcolour)
+
 #### Type aliases
 
 ##### DefaultCliConsole
 
 Ƭ **DefaultCliConsole**: `ReturnType`<typeof [`default`](#default)\>
+
+CliConsole that has function signatures based on console.log/info/warn/error.
+
+#### Functions
+
+##### cliConsole
+
+▸ `Const` **cliConsole**<`FLAGS`\>(`flags`, `debugFlagName?`, `quietFlagName?`): `CliConsole`<`fn`, `fn`, `fn`, `fn`\>
+
+Build an encapsulation of console output functions with console.log/info/warn/error.
+
+###### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `FLAGS` | extends `Record`<`string`, `any`\> |
+
+###### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `flags` | `FLAGS` | `undefined` | The flag object that contains fields for knowning whether debug is enabled and whether quiet mode is enabled. Those fields are evaluated only once within the function. They are not evaluated when debug/info/warn/error functions are called. |
+| `debugFlagName` | keyof `FLAGS` | `'debug'` | Name of the debug field in the flags object |
+| `quietFlagName` | keyof `FLAGS` | `'quiet'` | Name of the quiet field in the flags object |
+
+###### Returns
+
+`CliConsole`<`fn`, `fn`, `fn`, `fn`\>
+
+An CliConsole instance that uses console.log/info/warn/error.
+
+___
+
+##### cliConsoleWithColour
+
+▸ `Const` **cliConsoleWithColour**<`FLAGS`, `COLOURER`\>(`flags`, `colourer`, `debugColourFuncName?`, `infoColourFuncName?`, `warnColourFuncName?`, `errorColourFuncName?`, `debugFlagName?`, `quietFlagName?`): `CliConsole`<`fn`, `fn`, `fn`, `fn`\>
+
+Build an encapsulation of console output functions with console.log/info/warn/error and chalk/colors/cli-color.
+
+###### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `FLAGS` | extends `Record`<`string`, `any`\> |
+| `COLOURER` | extends `Record`<`string`, `any`\> |
+
+###### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `flags` | `FLAGS` | `undefined` | The flag object that contains fields for knowning whether debug is enabled and whether quiet mode is enabled. Those fields are evaluated only once within the function. They are not evaluated when debug/info/warn/error functions are called. |
+| `colourer` | `COLOURER` | `undefined` | Supplier of the colouring function, such as chalk or colors or cli-color |
+| `debugColourFuncName` | keyof `COLOURER` | `'grey'` | Name of the function within colourer that will be used to add colour to debug messages, or null if colouring is not desired. |
+| `infoColourFuncName?` | keyof `COLOURER` | `undefined` | Name of the function within colourer that will be used to add colour to info messages, or null if colouring is not desired. |
+| `warnColourFuncName` | keyof `COLOURER` | `'yellow'` | Name of the function within colourer that will be used to add colour to warn messages, or null if colouring is not desired. |
+| `errorColourFuncName` | keyof `COLOURER` | `'red'` | Name of the function within colourer that will be used to add colour to error messages, or null if colouring is not desired. |
+| `debugFlagName` | keyof `FLAGS` | `'debug'` | Name of the debug field in the flags object |
+| `quietFlagName` | keyof `FLAGS` | `'quiet'` | Name of the quiet field in the flags object |
+
+###### Returns
+
+`CliConsole`<`fn`, `fn`, `fn`, `fn`\>
+
+An CliConsole instance that uses console.log/info/warn/error and also adds colour to the messages using chalk/colors/cli-color.
+
+
+<a name="modulesindexmd"></a>
+
+[@handy-common-utils/oclif-utils](#readmemd) / index
+
+### Module: index
 
 
 <a name="modulesoclif_utilsmd"></a>
@@ -546,11 +623,10 @@ ___
 - [CommandArgs](#commandargs)
 - [CommandFlags](#commandflags)
 - [CommandOptions](#commandoptions)
+- [Flags](#flags)
 
 ##### Functions
 
-- [cliConsole](#cliconsole)
-- [cliConsoleWithColour](#cliconsolewithcolour)
 - [generateHelpText](#generatehelptext)
 - [getCommandConfig](#getcommandconfig)
 - [injectHelpTextIntoReadmeMd](#injecthelptextintoreadmemd)
@@ -598,7 +674,7 @@ ___
 
 ##### CommandOptions
 
-Ƭ **CommandOptions**<`T`\>: `Parser.Output`<[`CommandFlags`](#commandflags)<`T`\>, [`CommandArgs`](#commandargs)<`T`\>\>
+Ƭ **CommandOptions**<`T`\>: `Parser.Output`<`CommandFlags`<`T`\>, `CommandArgs`<`T`\>\>
 
 ###### Type parameters
 
@@ -606,69 +682,21 @@ ___
 | :------ | :------ |
 | `T` | extends `Object` |
 
+___
+
+##### Flags
+
+Ƭ **Flags**<`T`\>: `T` extends `Parser.flags.Input`<infer F\> ? `F` : `never`
+
+Get the flag object type from flags configuration type
+
+###### Type parameters
+
+| Name |
+| :------ |
+| `T` |
+
 #### Functions
-
-##### cliConsole
-
-▸ `Const` **cliConsole**<`FLAGS`\>(`flags`, `debugFlagName?`, `quietFlagName?`): [`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
-
-Build an encapsulation of console output functions with console.log/info/warn/error.
-
-###### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `FLAGS` | extends `Record`<`string`, `any`\> |
-
-###### Parameters
-
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `flags` | `FLAGS` | `undefined` | The flag object that contains fields for knowning whether debug is enabled and whether quiet mode is enabled. Those fields are evaluated only once within the function. They are not evaluated when debug/info/warn/error functions are called. |
-| `debugFlagName` | keyof `FLAGS` | `'debug'` | Name of the debug field in the flags object |
-| `quietFlagName` | keyof `FLAGS` | `'quiet'` | Name of the quiet field in the flags object |
-
-###### Returns
-
-[`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
-
-An CliConsole instance that uses console.log/info/warn/error.
-
-___
-
-##### cliConsoleWithColour
-
-▸ `Const` **cliConsoleWithColour**<`FLAGS`, `COLOURER`\>(`flags`, `colourer`, `debugColourFuncName?`, `infoColourFuncName?`, `warnColourFuncName?`, `errorColourFuncName?`, `debugFlagName?`, `quietFlagName?`): [`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
-
-Build an encapsulation of console output functions with console.log/info/warn/error and chalk/colors/cli-color.
-
-###### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `FLAGS` | extends `Record`<`string`, `any`\> |
-| `COLOURER` | extends `Record`<`string`, `any`\> |
-
-###### Parameters
-
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `flags` | `FLAGS` | `undefined` | The flag object that contains fields for knowning whether debug is enabled and whether quiet mode is enabled. Those fields are evaluated only once within the function. They are not evaluated when debug/info/warn/error functions are called. |
-| `colourer` | `COLOURER` | `undefined` | Supplier of the colouring function, such as chalk or colors or cli-color |
-| `debugColourFuncName` | keyof `COLOURER` | `'grey'` | Name of the function within colourer that will be used to add colour to debug messages, or null if colouring is not desired. |
-| `infoColourFuncName?` | keyof `COLOURER` | `undefined` | Name of the function within colourer that will be used to add colour to info messages, or null if colouring is not desired. |
-| `warnColourFuncName` | keyof `COLOURER` | `'yellow'` | Name of the function within colourer that will be used to add colour to warn messages, or null if colouring is not desired. |
-| `errorColourFuncName` | keyof `COLOURER` | `'red'` | Name of the function within colourer that will be used to add colour to error messages, or null if colouring is not desired. |
-| `debugFlagName` | keyof `FLAGS` | `'debug'` | Name of the debug field in the flags object |
-| `quietFlagName` | keyof `FLAGS` | `'quiet'` | Name of the quiet field in the flags object |
-
-###### Returns
-
-[`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
-
-An CliConsole instance that uses console.log/info/warn/error and also adds colour to the messages using chalk/colors/cli-color.
-
-___
 
 ##### generateHelpText
 
@@ -722,7 +750,7 @@ ___
 
 ##### parseCommandLine
 
-▸ `Const` **parseCommandLine**<`T`\>(`commandInstance`): [`CommandOptions`](#commandoptions)<`T`\>
+▸ `Const` **parseCommandLine**<`T`\>(`commandInstance`): `CommandOptions`<`T`\>
 
 ###### Type parameters
 
@@ -738,7 +766,7 @@ ___
 
 ###### Returns
 
-[`CommandOptions`](#commandoptions)<`T`\>
+`CommandOptions`<`T`\>
 
 ___
 
@@ -773,7 +801,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `commandInstance` | `InstanceType`<`T`\> |
-| `options?` | [`CommandOptions`](#commandoptions)<`T`\> |
+| `options?` | `CommandOptions`<`T`\> |
 
 ###### Returns
 

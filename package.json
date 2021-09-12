@@ -12,8 +12,8 @@
     "package.json",
     "dist"
   ],
-  "main": "dist/oclif-utils.js",
-  "types": "dist/oclif-utils.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {},
   "dependencies": {
     "@handy-common-utils/promise-utils": "^1.0.5",
@@ -23,8 +23,9 @@
     "fs-extra": "^9.0.1"
   },
   "devDependencies": {
-    "@handy-common-utils/dev-dependencies": "^1.0.19",
-    "@types/fs-extra": "^8.1.1"
+    "@handy-common-utils/dev-dependencies": "^1.0.20",
+    "@types/fs-extra": "^8.1.1",
+    "typedoc-plugin-remove-references": "^0.0.5"
   },
   "publishConfig": {
     "access": "public"
