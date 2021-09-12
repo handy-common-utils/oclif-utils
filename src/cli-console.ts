@@ -45,27 +45,19 @@ export class CliConsole<DEBUG_FUNC extends Function, INFO_FUNC extends Function,
     return new CliConsole(
       // debug
       (message?: any, ...optionalParams: any[]) => {
-        if (typeof message === 'string') {
-          console.log(debugColourFuncName == null ? message : (colourer[debugColourFuncName] as any as Function)(message), ...optionalParams);
-        }
+        console.log(debugColourFuncName == null || typeof message !== 'string' ? message : (colourer[debugColourFuncName] as any as Function)(message), ...optionalParams);
       },
       // info
       (message?: any, ...optionalParams: any[]) => {
-        if (typeof message === 'string') {
-          console.info(infoColourFuncName == null ? message : (colourer[infoColourFuncName] as any as Function)(message), ...optionalParams);
-        }
+        console.info(infoColourFuncName == null || typeof message !== 'string' ? message : (colourer[infoColourFuncName] as any as Function)(message), ...optionalParams);
       },
       // warn
       (message?: any, ...optionalParams: any[]) => {
-        if (typeof message === 'string') {
-          console.warn(warnColourFuncName == null ? message : (colourer[warnColourFuncName] as any as Function)(message), ...optionalParams);
-        }
+        console.warn(warnColourFuncName == null || typeof message !== 'string' ? message : (colourer[warnColourFuncName] as any as Function)(message), ...optionalParams);
       },
       // error
       (message?: any, ...optionalParams: any[]) => {
-        if (typeof message === 'string') {
-          console.error(errorColourFuncName == null ? message : (colourer[errorColourFuncName] as any as Function)(message), ...optionalParams);
-        }
+        console.error(errorColourFuncName == null || typeof message !== 'string' ? message : (colourer[errorColourFuncName] as any as Function)(message), ...optionalParams);
       },
       flags[debugFlagName], flags[quietFlagName],
     );
