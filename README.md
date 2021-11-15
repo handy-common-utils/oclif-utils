@@ -234,7 +234,7 @@ ___
 
 ##### default
 
-▸ `Static` **default**<`FLAGS`\>(`flags`, `debugFlagName?`, `quietFlagName?`): `CliConsole`<`fn`, `fn`, `fn`, `fn`\>
+▸ `Static` **default**<`FLAGS`\>(`flags`, `debugFlagName?`, `quietFlagName?`): [`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
 
 Build an instance with console.log/info/warn/error.
 
@@ -254,7 +254,7 @@ Build an instance with console.log/info/warn/error.
 
 ###### Returns
 
-`CliConsole`<`fn`, `fn`, `fn`, `fn`\>
+[`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
 
 An instance that uses console.log/info/warn/error.
 
@@ -262,7 +262,7 @@ ___
 
 ##### withColour
 
-▸ `Static` **withColour**<`FLAGS`, `COLOURER`\>(`flags`, `colourer`, `debugColourFuncName?`, `infoColourFuncName?`, `warnColourFuncName?`, `errorColourFuncName?`, `debugFlagName?`, `quietFlagName?`): `CliConsole`<`fn`, `fn`, `fn`, `fn`\>
+▸ `Static` **withColour**<`FLAGS`, `COLOURER`\>(`flags`, `colourer`, `debugColourFuncName?`, `infoColourFuncName?`, `warnColourFuncName?`, `errorColourFuncName?`, `debugFlagName?`, `quietFlagName?`): [`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
 
 Build an instance with console.log/info/warn/error and chalk/colors/cli-color.
 
@@ -288,7 +288,7 @@ Build an instance with console.log/info/warn/error and chalk/colors/cli-color.
 
 ###### Returns
 
-`CliConsole`<`fn`, `fn`, `fn`, `fn`\>
+[`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
 
 An instance that uses console.log/info/warn/error and also adds colour to the messages using chalk/colors/cli-color.
 
@@ -380,7 +380,7 @@ ___
 
 ##### parseCommandLine
 
-▸ `Static` **parseCommandLine**<`T`\>(`commandInstance`): `CommandOptions`<`T`\>
+▸ `Static` **parseCommandLine**<`T`\>(`commandInstance`): [`CommandOptions`](#commandoptions)<`T`\>
 
 ###### Type parameters
 
@@ -396,7 +396,7 @@ ___
 
 ###### Returns
 
-`CommandOptions`<`T`\>
+[`CommandOptions`](#commandoptions)<`T`\>
 
 ___
 
@@ -438,7 +438,7 @@ Reconstruct the command line from already parsed options.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `commandInstance` | `InstanceType`<`T`\> | When calling from the subclass of `Command`, just pass `this` |
-| `options?` | `CommandOptions`<`T`\> | already parsed options |
+| `options?` | [`CommandOptions`](#commandoptions)<`T`\> | already parsed options |
 
 ###### Returns
 
@@ -540,7 +540,7 @@ CliConsole that has function signatures based on console.log/info/warn/error.
 
 ##### cliConsole
 
-▸ `Const` **cliConsole**<`FLAGS`\>(`flags`, `debugFlagName?`, `quietFlagName?`): `CliConsole`<`fn`, `fn`, `fn`, `fn`\>
+▸ `Const` **cliConsole**<`FLAGS`\>(`flags`, `debugFlagName?`, `quietFlagName?`): [`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
 
 Build an encapsulation of console output functions with console.log/info/warn/error.
 
@@ -560,7 +560,7 @@ Build an encapsulation of console output functions with console.log/info/warn/er
 
 ###### Returns
 
-`CliConsole`<`fn`, `fn`, `fn`, `fn`\>
+[`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
 
 An CliConsole instance that uses console.log/info/warn/error.
 
@@ -568,7 +568,7 @@ ___
 
 ##### cliConsoleWithColour
 
-▸ `Const` **cliConsoleWithColour**<`FLAGS`, `COLOURER`\>(`flags`, `colourer`, `debugColourFuncName?`, `infoColourFuncName?`, `warnColourFuncName?`, `errorColourFuncName?`, `debugFlagName?`, `quietFlagName?`): `CliConsole`<`fn`, `fn`, `fn`, `fn`\>
+▸ `Const` **cliConsoleWithColour**<`FLAGS`, `COLOURER`\>(`flags`, `colourer`, `debugColourFuncName?`, `infoColourFuncName?`, `warnColourFuncName?`, `errorColourFuncName?`, `debugFlagName?`, `quietFlagName?`): [`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
 
 Build an encapsulation of console output functions with console.log/info/warn/error and chalk/colors/cli-color.
 
@@ -594,7 +594,7 @@ Build an encapsulation of console output functions with console.log/info/warn/er
 
 ###### Returns
 
-`CliConsole`<`fn`, `fn`, `fn`, `fn`\>
+[`CliConsole`](#classescli_consolecliconsolemd)<`fn`, `fn`, `fn`, `fn`\>
 
 An CliConsole instance that uses console.log/info/warn/error and also adds colour to the messages using chalk/colors/cli-color.
 
@@ -604,6 +604,130 @@ An CliConsole instance that uses console.log/info/warn/error and also adds colou
 [@handy-common-utils/oclif-utils](#readmemd) / index
 
 ### Module: index
+
+#### Table of contents
+
+##### References
+
+- [CliConsole](#cliconsole)
+- [CommandArgNames](#commandargnames)
+- [CommandArgs](#commandargs)
+- [CommandFlags](#commandflags)
+- [CommandOptions](#commandoptions)
+- [DefaultCliConsole](#defaultcliconsole)
+- [Flags](#flags)
+- [OclifHelpContent](#oclifhelpcontent)
+- [OclifUtils](#oclifutils)
+- [cliConsole](#cliconsole)
+- [cliConsoleWithColour](#cliconsolewithcolour)
+- [generateHelpText](#generatehelptext)
+- [getCommandConfig](#getcommandconfig)
+- [injectHelpTextIntoReadmeMd](#injecthelptextintoreadmemd)
+- [parseCommandLine](#parsecommandline)
+- [prependCliToExamples](#prependclitoexamples)
+- [reconstructCommandLine](#reconstructcommandline)
+
+#### References
+
+##### CliConsole
+
+Re-exports: [CliConsole](#classescli_consolecliconsolemd)
+
+___
+
+##### CommandArgNames
+
+Re-exports: [CommandArgNames](#commandargnames)
+
+___
+
+##### CommandArgs
+
+Re-exports: [CommandArgs](#commandargs)
+
+___
+
+##### CommandFlags
+
+Re-exports: [CommandFlags](#commandflags)
+
+___
+
+##### CommandOptions
+
+Re-exports: [CommandOptions](#commandoptions)
+
+___
+
+##### DefaultCliConsole
+
+Re-exports: [DefaultCliConsole](#defaultcliconsole)
+
+___
+
+##### Flags
+
+Re-exports: [Flags](#flags)
+
+___
+
+##### OclifHelpContent
+
+Re-exports: [OclifHelpContent](#interfacesoclif_utilsoclifhelpcontentmd)
+
+___
+
+##### OclifUtils
+
+Re-exports: [OclifUtils](#classesoclif_utilsoclifutilsmd)
+
+___
+
+##### cliConsole
+
+Re-exports: [cliConsole](#cliconsole)
+
+___
+
+##### cliConsoleWithColour
+
+Re-exports: [cliConsoleWithColour](#cliconsolewithcolour)
+
+___
+
+##### generateHelpText
+
+Re-exports: [generateHelpText](#generatehelptext)
+
+___
+
+##### getCommandConfig
+
+Re-exports: [getCommandConfig](#getcommandconfig)
+
+___
+
+##### injectHelpTextIntoReadmeMd
+
+Re-exports: [injectHelpTextIntoReadmeMd](#injecthelptextintoreadmemd)
+
+___
+
+##### parseCommandLine
+
+Re-exports: [parseCommandLine](#parsecommandline)
+
+___
+
+##### prependCliToExamples
+
+Re-exports: [prependCliToExamples](#prependclitoexamples)
+
+___
+
+##### reconstructCommandLine
+
+Re-exports: [reconstructCommandLine](#reconstructcommandline)
 
 
 <a name="modulesoclif_utilsmd"></a>
@@ -679,7 +803,7 @@ ___
 
 ##### CommandOptions
 
-Ƭ **CommandOptions**<`T`\>: `Parser.Output`<`CommandFlags`<`T`\>, `CommandArgs`<`T`\>\>
+Ƭ **CommandOptions**<`T`\>: `Parser.Output`<[`CommandFlags`](#commandflags)<`T`\>, [`CommandArgs`](#commandargs)<`T`\>\>
 
 ###### Type parameters
 
@@ -755,7 +879,7 @@ ___
 
 ##### parseCommandLine
 
-▸ `Const` **parseCommandLine**<`T`\>(`commandInstance`): `CommandOptions`<`T`\>
+▸ `Const` **parseCommandLine**<`T`\>(`commandInstance`): [`CommandOptions`](#commandoptions)<`T`\>
 
 ###### Type parameters
 
@@ -771,7 +895,7 @@ ___
 
 ###### Returns
 
-`CommandOptions`<`T`\>
+[`CommandOptions`](#commandoptions)<`T`\>
 
 ___
 
@@ -806,7 +930,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `commandInstance` | `InstanceType`<`T`\> |
-| `options?` | `CommandOptions`<`T`\> |
+| `options?` | [`CommandOptions`](#commandoptions)<`T`\> |
 
 ###### Returns
 
