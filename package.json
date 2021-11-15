@@ -1,6 +1,6 @@
 {
   "name": "@handy-common-utils/oclif-utils",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "oclif related utilities",
   "scripts": {
     "pretest": "eslint . --ext .ts",
