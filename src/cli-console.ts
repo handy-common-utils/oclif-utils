@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/no-null */
 /* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/ban-types */
@@ -39,6 +38,7 @@ export class CliConsole<DEBUG_FUNC extends Function, INFO_FUNC extends Function,
    * @returns An instance that uses console.log/info/warn/error and also adds colour to the messages using chalk/colors/cli-color.
    */
   static withColour<FLAGS extends Record<string, any>, COLOURER extends Record<string, any>>(flags: FLAGS,
+    // eslint-disable-next-line default-param-last
     colourer: COLOURER, debugColourFuncName: keyof COLOURER = 'grey', infoColourFuncName?: keyof COLOURER | undefined, warnColourFuncName: keyof COLOURER = 'yellow', errorColourFuncName: keyof COLOURER = 'red',
     debugFlagName: keyof FLAGS = 'debug', quietFlagName: keyof FLAGS = 'quiet',
   ) {
@@ -59,7 +59,8 @@ export class CliConsole<DEBUG_FUNC extends Function, INFO_FUNC extends Function,
       (message?: any, ...optionalParams: any[]) => {
         console.error(errorColourFuncName == null || typeof message !== 'string' ? message : (colourer[errorColourFuncName] as any as Function)(message), ...optionalParams);
       },
-      flags[debugFlagName], flags[quietFlagName],
+      flags[debugFlagName],
+      flags[quietFlagName],
     );
   }
 

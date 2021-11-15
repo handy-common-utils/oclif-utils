@@ -23,7 +23,7 @@
     "fs-extra": "^9.0.1"
   },
   "devDependencies": {
-    "@handy-common-utils/dev-dependencies": "^1.0.20",
+    "@handy-common-utils/dev-dependencies": "^1.0.31",
     "@types/fs-extra": "^8.1.1",
     "typedoc-plugin-remove-references": "^0.0.5"
   },

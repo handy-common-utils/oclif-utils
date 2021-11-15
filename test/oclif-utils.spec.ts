@@ -1,6 +1,4 @@
-/* eslint-disable no-use-before-define */
 import { Command, flags } from '@oclif/command';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { OclifUtils, CommandOptions } from '../src/oclif-utils';
 import { expect } from 'chai';
 
@@ -53,7 +51,6 @@ It generates website files locally and can optionally launch a local server for 
   async run() {
     const options = OclifUtils.parseCommandLine<typeof TestCommand>(this);
     // const options = this.parse<CommandFlags<typeof TestCommand>, CommandArgs<typeof TestCommand>>(TestCommand, argv);
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     testResultOptions = options;
     /*
     if (options.flags['update-readme.md']) {
@@ -63,7 +60,6 @@ It generates website files locally and can optionally launch a local server for 
     */
 
     const commandLine = OclifUtils.reconstructCommandLine(this);
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     testResultCommandLine = commandLine;
   }
 }
