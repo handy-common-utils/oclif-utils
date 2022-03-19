@@ -1,10 +1,8 @@
-/* eslint-disable max-depth */
+/* eslint-disable no-warning-comments */
 import * as fs from 'fs-extra';
 import * as Config from '@oclif/config';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Command } from '@oclif/command';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { HelpOptions, Help } from '@oclif/plugin-help';
+import { Help } from '@oclif/core';
 import * as Parser from '@oclif/parser';
 
 export function getCommandConfig(commandInstance: Command): Config.Command {
@@ -16,14 +14,16 @@ export function getCommandConfig(commandInstance: Command): Config.Command {
 }
 
 class SingleCommandHelp extends Help {
-  constructor(protected commandInstance: Command, options?: Partial<HelpOptions>) {
-    super(commandInstance.config, options);
+  constructor(protected commandInstance: Command, options?: ConstructorParameters<typeof Help>[1]) {
+    // TODO: casting to any is risky
+    super(commandInstance.config as any, options);
   }
 
   generateHelpText() {
     const cmd = getCommandConfig(this.commandInstance);
 
-    const helpText = this.formatCommand(cmd);
+    // TODO: casting to any is risky
+    const helpText = this.formatCommand(cmd as any);
     return helpText;
   }
 }
@@ -44,7 +44,6 @@ const quoteIfNeeded = (text: any) => {
   return `'${text}'`;
 };
 
-// eslint-disable-next-line unicorn/no-static-only-class
 export class OclifUtils {
   static getCommandConfig(commandInstance: Command): Config.Command {
     return getCommandConfig(commandInstance);
@@ -69,7 +68,7 @@ export class OclifUtils {
    * @param options format options
    * @return help content
    */
-  static generateHelpText(commandInstance: Command, options?: Partial<HelpOptions>): string {
+  static generateHelpText(commandInstance: Command, options?: ConstructorParameters<typeof SingleCommandHelp>[1]): string {
     const help = new SingleCommandHelp(commandInstance, {
       stripAnsi: true,
       maxWidth: 80,
@@ -78,7 +77,7 @@ export class OclifUtils {
     return help.generateHelpText();
   }
 
-  static async injectHelpTextIntoReadmeMd(commandInstance: Command, options?: Partial<HelpOptions>): Promise<void> {
+  static async injectHelpTextIntoReadmeMd(commandInstance: Command, options?: ConstructorParameters<typeof SingleCommandHelp>[1]): Promise<void> {
     const helpText = OclifUtils.generateHelpText(commandInstance, {
       stripAnsi: true,
       maxWidth: 80,

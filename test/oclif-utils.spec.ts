@@ -27,6 +27,8 @@ It generates website files locally and can optionally launch a local server for 
     parallelism: flags.integer({ char: 'l', default: 2, description: 'approximately how many AWS API calls are allowed at the same time' }),
     quiet: flags.boolean({ char: 'q', description: 'no console output' }),
     debug: flags.boolean({ char: 'd', description: 'output debug messages' }),
+
+    generateHelpText: flags.boolean({ hidden: true, description: 'For testing generateHelpText(...)' }),
   };
 
   static args = [
@@ -59,12 +61,17 @@ It generates website files locally and can optionally launch a local server for 
     }
     */
 
+    if (options.flags.generateHelpText) {
+      testResultHelpText = OclifUtils.generateHelpText(this);
+    }
+
     const commandLine = OclifUtils.reconstructCommandLine(this);
     testResultCommandLine = commandLine;
   }
 }
 
 let testResultOptions: CommandOptions<typeof TestCommand>;
+let testResultHelpText: string;
 let testResultCommandLine: string;
 
 describe('OclifUtils', () => {
@@ -110,5 +117,24 @@ describe('OclifUtils', () => {
       '--server',
     ]);
     expect(testResultCommandLine).to.eq("@handy-common-utils/oclif-utils api-doc '8 and eight' --parallelism 10 --include '*xyz*' 'abc and d' --exclude x1 --server --port 8002");
+  });
+
+  it('should generateHelpText', async () => {
+    await TestCommand.run([
+      '--generateHelpText',
+    ]);
+    expect(testResultHelpText).to.include('USAGE');
+    expect(testResultHelpText).to.include('$ @handy-common-utils/oclif-utils  [PATH] [DEPTH]');
+    expect(testResultHelpText).to.include('ARGUMENTS');
+    expect(testResultHelpText).to.include('PATH   [default: dataflow] path for putting generated website files');
+    expect(testResultHelpText).to.include('DEPTH  [default: 5] a sample argument');
+    expect(testResultHelpText).to.include('FLAGS');
+    expect(testResultHelpText).to.include('-d, --debug                output debug messages');
+    expect(testResultHelpText).to.include('-x, --exclude=<value>');
+    expect(testResultHelpText).to.include('DESCRIPTION');
+    expect(testResultHelpText).to.include('Visualisation of AWS serverless');
+    expect(testResultHelpText).to.include('This tool is free and open source');
+    expect(testResultHelpText).to.include('EXAMPLES');
+    expect(testResultHelpText).to.include('$ @handy-common-utils/oclif-utils -r ap-southeast-2 -s');
   });
 });
