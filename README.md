@@ -113,7 +113,6 @@ import { prependCliToExamples } from '@handy-common-utils/oclif-utils';
 ### Modules
 
 - [cli-console](#modulescli_consolemd)
-- [index](#modulesindexmd)
 - [oclif-utils](#modulesoclif_utilsmd)
 
 ## Classes
@@ -434,95 +433,6 @@ Build an encapsulation of console output functions with console.log/info/warn/er
 [`CliConsole`](#classescli_consolecliconsolemd)<(`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`\>
 
 An CliConsole instance that uses console.log/info/warn/error and also adds colour to the messages using chalk/colors/cli-color.
-
-
-<a name="modulesindexmd"></a>
-
-### Module: index
-
-#### References
-
-##### CliConsole
-
-Re-exports [CliConsole](#classescli_consolecliconsolemd)
-
-___
-
-##### CommandArgNames
-
-Re-exports [CommandArgNames](#commandargnames)
-
-___
-
-##### CommandArgs
-
-Re-exports [CommandArgs](#commandargs)
-
-___
-
-##### CommandFlags
-
-Re-exports [CommandFlags](#commandflags)
-
-___
-
-##### CommandOptions
-
-Re-exports [CommandOptions](#commandoptions)
-
-___
-
-##### DefaultCliConsole
-
-Re-exports [DefaultCliConsole](#defaultcliconsole)
-
-___
-
-##### OclifUtils
-
-Re-exports [OclifUtils](#classesoclif_utilsoclifutilsmd)
-
-___
-
-##### cliConsole
-
-Re-exports [cliConsole](#cliconsole)
-
-___
-
-##### cliConsoleWithColour
-
-Re-exports [cliConsoleWithColour](#cliconsolewithcolour)
-
-___
-
-##### generateHelpText
-
-Re-exports [generateHelpText](#generatehelptext)
-
-___
-
-##### getCommandConfig
-
-Re-exports [getCommandConfig](#getcommandconfig)
-
-___
-
-##### injectHelpTextIntoReadmeMd
-
-Re-exports [injectHelpTextIntoReadmeMd](#injecthelptextintoreadmemd)
-
-___
-
-##### prependCliToExamples
-
-Re-exports [prependCliToExamples](#prependclitoexamples)
-
-___
-
-##### reconstructCommandLine
-
-Re-exports [reconstructCommandLine](#reconstructcommandline)
 
 
 <a name="modulesoclif_utilsmd"></a>
