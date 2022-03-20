@@ -1,4 +1,4 @@
-import { Command, flags } from '@oclif/command';
+import { Command, Flags } from '@oclif/core';
 import { OclifUtils, CommandOptions } from '../src/oclif-utils';
 import { expect } from 'chai';
 
@@ -10,25 +10,25 @@ It generates website files locally and can optionally launch a local server for 
 \nThis tool is free and open source: https://github.com/james-hu/aws-serverless-dataflow`;
 
   static flags = {
-    version: flags.version({ char: 'v' }),
-    help: flags.help({ char: 'h' }),
-    'update-readme.md': flags.boolean({ hidden: true, description: 'For developers only, don\'t use' }),
+    version: Flags.version({ char: 'v' }),
+    help: Flags.help({ char: 'h' }),
+    'update-readme.md': Flags.boolean({ hidden: true, description: 'For developers only, don\'t use' }),
 
-    region: flags.string({ char: 'r', description: 'AWS region (required if you don\'t have AWS_REGION environment variable configured)' }),
+    region: Flags.string({ char: 'r', description: 'AWS region (required if you don\'t have AWS_REGION environment variable configured)' }),
 
-    include: flags.string({ char: 'i', default: ['*'], multiple: true, description: 'wildcard patterns for domain names and ARN of Lambda functions/SNS topics/SQS queues that should be includeed' }),
-    exclude: flags.string({ char: 'x', multiple: true, description: 'wildcard patterns for domain names and ARN of Lambda functions/SNS topics/SQS queues that should be excluded' }),
+    include: Flags.string({ char: 'i', default: ['*'], multiple: true, description: 'wildcard patterns for domain names and ARN of Lambda functions/SNS topics/SQS queues that should be includeed' }),
+    exclude: Flags.string({ char: 'x', multiple: true, description: 'wildcard patterns for domain names and ARN of Lambda functions/SNS topics/SQS queues that should be excluded' }),
 
-    'cloud-formation': flags.boolean({ char: 'c', default: false, description: 'survey CloudFormation stack information (this takes more time)' }),
+    'cloud-formation': Flags.boolean({ char: 'c', default: false, description: 'survey CloudFormation stack information (this takes more time)' }),
 
-    server: flags.boolean({ char: 's', description: 'start a local http server and open a browser for pre-viewing generated website' }),
-    port: flags.integer({ char: 'p', default: 8002, description: 'port number of the local http server for preview' }),
+    server: Flags.boolean({ char: 's', description: 'start a local http server and open a browser for pre-viewing generated website' }),
+    port: Flags.integer({ char: 'p', default: 8002, description: 'port number of the local http server for preview' }),
 
-    parallelism: flags.integer({ char: 'l', default: 2, description: 'approximately how many AWS API calls are allowed at the same time' }),
-    quiet: flags.boolean({ char: 'q', description: 'no console output' }),
-    debug: flags.boolean({ char: 'd', description: 'output debug messages' }),
+    parallelism: Flags.integer({ char: 'l', default: 2, description: 'approximately how many AWS API calls are allowed at the same time' }),
+    quiet: Flags.boolean({ char: 'q', description: 'no console output' }),
+    debug: Flags.boolean({ char: 'd', description: 'output debug messages' }),
 
-    generateHelpText: flags.boolean({ hidden: true, description: 'For testing generateHelpText(...)' }),
+    generateHelpText: Flags.boolean({ hidden: true, description: 'For testing generateHelpText(...)' }),
   };
 
   static args = [
@@ -51,8 +51,7 @@ It generates website files locally and can optionally launch a local server for 
   }
 
   async run() {
-    const options = OclifUtils.parseCommandLine<typeof TestCommand>(this);
-    // const options = this.parse<CommandFlags<typeof TestCommand>, CommandArgs<typeof TestCommand>>(TestCommand, argv);
+    const options = await this.parse() as CommandOptions<typeof TestCommand>;
     testResultOptions = options;
     /*
     if (options.flags['update-readme.md']) {
@@ -60,12 +59,11 @@ It generates website files locally and can optionally launch a local server for 
       return;
     }
     */
-
     if (options.flags.generateHelpText) {
-      testResultHelpText = OclifUtils.generateHelpText(this);
+      testResultHelpText = await OclifUtils.generateHelpText(this);
     }
 
-    const commandLine = OclifUtils.reconstructCommandLine(this);
+    const commandLine = OclifUtils.reconstructCommandLine(this, options);
     testResultCommandLine = commandLine;
   }
 }

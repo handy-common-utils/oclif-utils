@@ -19,14 +19,15 @@ With this utility library, you will be able to:
 
 ## How to use
 
-If you are using latest versions of oclif components ("@oclif/command": "^1.8.16", "@oclif/config": "^1.18.3", "@oclif/plugin-help": "^5.1.12"), 
+If you are using latest versions of
+[@oclif/core](https://github.com/oclif/core)([introduction](https://oclif.io/blog/2021/03/01/introducing-oclif-core), [migration](https://github.com/oclif/core/blob/main/MIGRATION.md)), 
 just add latest version of this package as dependency:
 
 ```sh
 npm install @handy-common-utils/oclif-utils@latest
 ```
 
-Otherwise if the versions of oclif components you are using are older,
+Otherwise if the versions of oclif components you are using are older (that means you are still using @oclif/config, @oclif/command, @oclif/parser),
 you need to use the older version of this package:
 
 ```sh
@@ -37,7 +38,7 @@ npm install @handy-common-utils/oclif-utils@1.0.9
 Then you can use it in the code:
 
 ```javascript
-import { Command, flags } from '@oclif/command';
+import { Command, Flags } from '@oclif/core';
 import { OclifUtils, cliConsole, cliConsoleWithColour } from '@handy-common-utils/oclif-utils';
 
 class AwsServerlessDataflow extends Command {
@@ -47,10 +48,10 @@ class AwsServerlessDataflow extends Command {
   // ... other code ...
 
   static flags = {
-    version: flags.version({ char: 'v' }),
-    help: flags.help({ char: 'h' }),
+    version: Flags.version({ char: 'v' }),
+    help: Flags.help({ char: 'h' }),
     'update-readme.md': flags.boolean({ hidden: true, description: 'For developers only, don\'t use' }),
-    debug: flags.boolean({ char: 'd', name: 'debug' }),
+    debug: Flags.boolean({ char: 'd', name: 'debug' }),
     // ... other code ...
   }
 
@@ -74,7 +75,7 @@ class AwsServerlessDataflow extends Command {
   }
 
   async run(): Promise<void> {
-    const options = OclifUtils.parseCommandLine<typeof AwsServerlessDataflow>(this);
+    const options = await this.parse() as CommandOptions<typeof AwsServerlessDataflow>;
     if (options.flags['update-readme.md']) {
       OclifUtils.injectHelpTextIntoReadmeMd(this); // you need to have <!-- help start -->...<!-- help end --> in your README.md
       return;
@@ -255,7 +256,7 @@ An instance that uses console.log/info/warn/error and also adds colour to the me
 
 ##### generateHelpText
 
-▸ `Static` **generateHelpText**(`commandInstance`, `options?`): `string`
+▸ `Static` **generateHelpText**(`commandInstance`, `options?`): `Promise`<`string`\>
 
 Generate formatted text content of help to a command
 
@@ -264,11 +265,11 @@ Generate formatted text content of help to a command
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `commandInstance` | `default` | instance of the Command |
-| `options?` | `Partial`<`HelpOptions`\> | format options |
+| `options?` | `HelpOptions` | format options |
 
 ###### Returns
 
-`string`
+`Promise`<`string`\>
 
 help content
 
@@ -276,7 +277,7 @@ ___
 
 ##### getCommandConfig
 
-▸ `Static` **getCommandConfig**(`commandInstance`): `Command`
+▸ `Static` **getCommandConfig**(`commandInstance`): `Promise`<`Command`\>
 
 ###### Parameters
 
@@ -286,7 +287,7 @@ ___
 
 ###### Returns
 
-`Command`
+`Promise`<`Command`\>
 
 ___
 
@@ -299,33 +300,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `commandInstance` | `default` |
-| `options?` | `Partial`<`HelpOptions`\> |
+| `options?` | `HelpOptions` |
 
 ###### Returns
 
 `Promise`<`void`\>
-
-___
-
-##### parseCommandLine
-
-▸ `Static` **parseCommandLine**<`T`\>(`commandInstance`): [`CommandOptions`](#commandoptions)<`T`\>
-
-###### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `Object` |
-
-###### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `commandInstance` | `InstanceType`<`T`\> |
-
-###### Returns
-
-[`CommandOptions`](#commandoptions)<`T`\>
 
 ___
 
@@ -352,7 +331,7 @@ ___
 
 ##### reconstructCommandLine
 
-▸ `Static` **reconstructCommandLine**<`T`\>(`commandInstance`, `options?`): `string`
+▸ `Static` **reconstructCommandLine**<`T`\>(`commandInstance`, `options`): `string`
 
 Reconstruct the command line from already parsed options.
 
@@ -367,7 +346,7 @@ Reconstruct the command line from already parsed options.
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `commandInstance` | `InstanceType`<`T`\> | When calling from the subclass of `Command`, just pass `this` |
-| `options?` | [`CommandOptions`](#commandoptions)<`T`\> | already parsed options |
+| `options` | [`CommandOptions`](#commandoptions)<`T`\> | Already parsed options. It can be got with `const options = await OclifUtils.parseCommandLine(commandInstance);` |
 
 ###### Returns
 
@@ -375,26 +354,12 @@ Reconstruct the command line from already parsed options.
 
 the command line string corresponding to the parsed options
 
-## Interfaces
+## Modules
 
 
-<a name="interfacesoclif_utilsoclifhelpcontentmd"></a>
+<a name="modulescli_consolemd"></a>
 
-### Interface: OclifHelpContent
-
-[oclif-utils](#modulesoclif_utilsmd).OclifHelpContent
-
-#### Properties
-
-| Property | Description |
-| --- | --- |
-| • `Optional` **aliases**: `string` |  |
-| • `Optional` **args**: `string` |  |
-| • `Optional` **description**: `string` |  |
-| • `Optional` **examples**: `string` |  |
-| • `Optional` **flags**: `string` |  |
-| • `Optional` **usage**: `string` | ## Modules<br><br><br><a name="modulescli_consolemd"></a><br><br>### Module: cli-console |
-
+### Module: cli-console
 
 #### Classes
 
@@ -513,18 +478,6 @@ Re-exports [DefaultCliConsole](#defaultcliconsole)
 
 ___
 
-##### Flags
-
-Re-exports [Flags](#flags)
-
-___
-
-##### OclifHelpContent
-
-Re-exports [OclifHelpContent](#interfacesoclif_utilsoclifhelpcontentmd)
-
-___
-
 ##### OclifUtils
 
 Re-exports [OclifUtils](#classesoclif_utilsoclifutilsmd)
@@ -561,12 +514,6 @@ Re-exports [injectHelpTextIntoReadmeMd](#injecthelptextintoreadmemd)
 
 ___
 
-##### parseCommandLine
-
-Re-exports [parseCommandLine](#parsecommandline)
-
-___
-
 ##### prependCliToExamples
 
 Re-exports [prependCliToExamples](#prependclitoexamples)
@@ -585,10 +532,6 @@ Re-exports [reconstructCommandLine](#reconstructcommandline)
 #### Classes
 
 - [OclifUtils](#classesoclif_utilsoclifutilsmd)
-
-#### Interfaces
-
-- [OclifHelpContent](#interfacesoclif_utilsoclifhelpcontentmd)
 
 #### Type aliases
 
@@ -618,7 +561,7 @@ ___
 
 ##### CommandFlags
 
-Ƭ **CommandFlags**<`T`\>: `T` extends `Parser.Input`<infer F\> ? `F` : `never`
+Ƭ **CommandFlags**<`T`\>: `T` extends `Interfaces.Input`<infer F\> ? `F` : `never`
 
 ###### Type parameters
 
@@ -630,7 +573,7 @@ ___
 
 ##### CommandOptions
 
-Ƭ **CommandOptions**<`T`\>: `Parser.Output`<[`CommandFlags`](#commandflags)<`T`\>, [`CommandArgs`](#commandargs)<`T`\>\>
+Ƭ **CommandOptions**<`T`\>: `Interfaces.ParserOutput`<[`CommandFlags`](#commandflags)<`T`\>, [`CommandArgs`](#commandargs)<`T`\>\>
 
 ###### Type parameters
 
@@ -638,42 +581,28 @@ ___
 | :------ | :------ |
 | `T` | extends `Object` |
 
-___
-
-##### Flags
-
-Ƭ **Flags**<`T`\>: `T` extends `Parser.flags.Input`<infer F\> ? `F` : `never`
-
-Get the flag object type from flags configuration type
-
-###### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
 #### Functions
 
 ##### generateHelpText
 
-▸ **generateHelpText**(`commandInstance`, `options?`): `string`
+▸ **generateHelpText**(`commandInstance`, `options?`): `Promise`<`string`\>
 
 ###### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `commandInstance` | `default` |
-| `options?` | `Partial`<`HelpOptions`\> |
+| `options?` | `HelpOptions` |
 
 ###### Returns
 
-`string`
+`Promise`<`string`\>
 
 ___
 
 ##### getCommandConfig
 
-▸ **getCommandConfig**(`commandInstance`): `Config.Command`
+▸ **getCommandConfig**(`commandInstance`): `Promise`<`Command`\>
 
 ###### Parameters
 
@@ -683,7 +612,7 @@ ___
 
 ###### Returns
 
-`Config.Command`
+`Promise`<`Command`\>
 
 ___
 
@@ -696,33 +625,11 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `commandInstance` | `default` |
-| `options?` | `Partial`<`HelpOptions`\> |
+| `options?` | `HelpOptions` |
 
 ###### Returns
 
 `Promise`<`void`\>
-
-___
-
-##### parseCommandLine
-
-▸ **parseCommandLine**<`T`\>(`commandInstance`): [`CommandOptions`](#commandoptions)<`T`\>
-
-###### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `Object` |
-
-###### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `commandInstance` | `InstanceType`<`T`\> |
-
-###### Returns
-
-[`CommandOptions`](#commandoptions)<`T`\>
 
 ___
 
@@ -744,7 +651,7 @@ ___
 
 ##### reconstructCommandLine
 
-▸ **reconstructCommandLine**<`T`\>(`commandInstance`, `options?`): `string`
+▸ **reconstructCommandLine**<`T`\>(`commandInstance`, `options`): `string`
 
 ###### Type parameters
 
@@ -757,7 +664,7 @@ ___
 | Name | Type |
 | :------ | :------ |
 | `commandInstance` | `InstanceType`<`T`\> |
-| `options?` | [`CommandOptions`](#commandoptions)<`T`\> |
+| `options` | [`CommandOptions`](#commandoptions)<`T`\> |
 
 ###### Returns
 

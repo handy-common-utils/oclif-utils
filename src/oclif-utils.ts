@@ -1,40 +1,16 @@
-/* eslint-disable no-warning-comments */
 import * as fs from 'fs-extra';
-import * as Config from '@oclif/config';
-import { Command } from '@oclif/command';
-import { Help } from '@oclif/core';
-import * as Parser from '@oclif/parser';
+import { Help, Command, toCached, Interfaces } from '@oclif/core';
 
-export function getCommandConfig(commandInstance: Command): Config.Command {
-  const cmd = Config.Command.toCached(commandInstance.ctor as any as Config.Command.Class);
-  if (cmd.id === undefined) {
-    cmd.id = '';
-  }
-  return cmd;
-}
-
-class SingleCommandHelp extends Help {
-  constructor(protected commandInstance: Command, options?: ConstructorParameters<typeof Help>[1]) {
-    // TODO: casting to any is risky
-    super(commandInstance.config as any, options);
+class HelpHelper extends Help {
+  constructor(protected commandInstance: Command, options?: Interfaces.HelpOptions) {
+    super(commandInstance.config as Interfaces.Config, options);
   }
 
-  generateHelpText() {
-    const cmd = getCommandConfig(this.commandInstance);
-
-    // TODO: casting to any is risky
-    const helpText = this.formatCommand(cmd as any);
+  async generateHelpText() {
+    const cmd = await getCommandConfig(this.commandInstance);
+    const helpText = this.formatCommand(cmd);
     return helpText;
   }
-}
-
-export interface OclifHelpContent {
-  usage?: string;
-  args?: string;
-  flags?: string;
-  description?: string;
-  aliases?: string;
-  examples?: string;
 }
 
 const quoteIfNeeded = (text: any) => {
@@ -45,8 +21,12 @@ const quoteIfNeeded = (text: any) => {
 };
 
 export class OclifUtils {
-  static getCommandConfig(commandInstance: Command): Config.Command {
-    return getCommandConfig(commandInstance);
+  static async getCommandConfig(commandInstance: Command): Promise<Interfaces.Command> {
+    const cmd = await toCached(commandInstance.ctor as any as Interfaces.Command.Class);
+    if (cmd.id === undefined) {
+      cmd.id = '';
+    }
+    return cmd;
   }
 
   /**
@@ -56,9 +36,17 @@ export class OclifUtils {
    * @return void
    */
   static prependCliToExamples(commandInstance: Command): void {
-    const cmd = commandInstance.ctor as any as Config.Command.Class;
+    const cmd = commandInstance.ctor as any as Interfaces.Command.Class;
     if (Array.isArray(cmd.examples)) {  // so that we don't have to hard code command name in the examples
-      cmd.examples = cmd.examples.map(s => s.startsWith('^ ') ? s.replace('^', commandInstance.config.bin) : s);
+      const prepend = (s: string) => (s && s.startsWith('^ ')) ? s.replace('^', commandInstance.config.bin) : s;
+      // eslint-disable-next-line unicorn/no-array-for-each
+      cmd.examples.forEach((example, index, examples) => {  // replace in place
+        if (typeof example === 'string') {
+          examples[index] = prepend(example);
+        } else if (example?.command) {
+          example.command = prepend(example.command);
+        }
+      });
     }
   }
 
@@ -68,21 +56,17 @@ export class OclifUtils {
    * @param options format options
    * @return help content
    */
-  static generateHelpText(commandInstance: Command, options?: ConstructorParameters<typeof SingleCommandHelp>[1]): string {
-    const help = new SingleCommandHelp(commandInstance, {
+  static generateHelpText(commandInstance: Command, options?: Interfaces.HelpOptions): Promise<string> {
+    const helper = new HelpHelper(commandInstance, {
       stripAnsi: true,
       maxWidth: 80,
       ...options,
     });
-    return help.generateHelpText();
+    return helper.generateHelpText();
   }
 
-  static async injectHelpTextIntoReadmeMd(commandInstance: Command, options?: ConstructorParameters<typeof SingleCommandHelp>[1]): Promise<void> {
-    const helpText = OclifUtils.generateHelpText(commandInstance, {
-      stripAnsi: true,
-      maxWidth: 80,
-      ...options,
-    });
+  static async injectHelpTextIntoReadmeMd(commandInstance: Command, options?: Interfaces.HelpOptions): Promise<void> {
+    const helpText = await OclifUtils.generateHelpText(commandInstance, options);
     const helpTextMd = '```\n' + helpText + '\n```\n';
 
     const fileName = 'README.md';
@@ -93,24 +77,17 @@ export class OclifUtils {
     await fs.outputFile(fileName, fileContent);
   }
 
-  static parseCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any}>(commandInstance: InstanceType<T>): CommandOptions<T> {
-    return Parser.parse(commandInstance.argv, { context: commandInstance, ...commandInstance.ctor });
-  }
-
   /**
    * Reconstruct the command line from already parsed options.
    * @param commandInstance When calling from the subclass of `Command`, just pass `this`
-   * @param options already parsed options
+   * @param options Already parsed options. It can be got with `const options = await OclifUtils.parseCommandLine(commandInstance);`
    * @returns the command line string corresponding to the parsed options
    */
-  static reconstructCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any}>(commandInstance: InstanceType<T>, options?: CommandOptions<T>): string {
-    if (options === undefined) {
-      options = OclifUtils.parseCommandLine(commandInstance);
-    }
+  static reconstructCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any}>(commandInstance: InstanceType<T>, options: CommandOptions<T>): string {
     const args = new Array<string>();
     args.push(commandInstance.config.bin);
     if (options.argv?.length > 0) {
-      args.push(...options.argv.map(x => quoteIfNeeded(x)));
+      args.push(...options.argv.map((x: string) => quoteIfNeeded(x)));
     }
     if (options.flags) {
       for (const flagName of Object.keys(options.flags)) {
@@ -133,20 +110,15 @@ export class OclifUtils {
   }
 }
 
+export const getCommandConfig = OclifUtils.getCommandConfig;
 export const prependCliToExamples = OclifUtils.prependCliToExamples;
 export const generateHelpText = OclifUtils.generateHelpText;
 export const injectHelpTextIntoReadmeMd = OclifUtils.injectHelpTextIntoReadmeMd;
-export const parseCommandLine = OclifUtils.parseCommandLine;
 export const reconstructCommandLine = OclifUtils.reconstructCommandLine;
 
-/**
- * Get the flag object type from flags configuration type
- */
-export type Flags<T> = T extends Parser.flags.Input<infer F> ? F : never;
-
-export type CommandFlags<T> = T extends Parser.Input<infer F> ? F : never
+export type CommandFlags<T> = T extends Interfaces.Input<infer F> ? F : never
 export type CommandArgNames<T> = T extends { name: infer A }[] ? A : never
-export type CommandArgs<T extends { args: Array<{ name: string }> }> = {
+export type CommandArgs<T extends { args?: Array<{ name: string }> }> = {
   [x in CommandArgNames<T['args']>]: string;
 }
-export type CommandOptions<T extends { args: Array<{ name: string }> }> = Parser.Output<CommandFlags<T>, CommandArgs<T>>
+export type CommandOptions<T extends { args?: Array<{ name: string }> }> = Interfaces.ParserOutput<CommandFlags<T>, CommandArgs<T>>;
