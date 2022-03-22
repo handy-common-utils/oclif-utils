@@ -445,45 +445,9 @@ An CliConsole instance that uses console.log/info/warn/error and also adds colou
 
 #### Type aliases
 
-##### CommandArgNames
-
-Ƭ **CommandArgNames**<`T`\>: `T` extends { `name`: infer A  }[] ? `A` : `never`
-
-###### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-___
-
-##### CommandArgs
-
-Ƭ **CommandArgs**<`T`\>: { [x in CommandArgNames<T["args"]\>]: string }
-
-###### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `Object` |
-
-___
-
-##### CommandFlags
-
-Ƭ **CommandFlags**<`T`\>: `T` extends `Interfaces.Input`<infer F\> ? `F` : `never`
-
-###### Type parameters
-
-| Name |
-| :------ |
-| `T` |
-
-___
-
 ##### CommandOptions
 
-Ƭ **CommandOptions**<`T`\>: `Interfaces.ParserOutput`<[`CommandFlags`](#commandflags)<`T`\>, [`CommandArgs`](#commandargs)<`T`\>\>
+Ƭ **CommandOptions**<`T`\>: `Interfaces.ParserOutput`<`CommandFlags`<`T`\>, `CommandArgs`<`T`\>\>
 
 ###### Type parameters
 
