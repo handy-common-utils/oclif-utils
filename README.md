@@ -75,7 +75,7 @@ class AwsServerlessDataflow extends Command {
   }
 
   async run(): Promise<void> {
-    const options = await this.parse() as CommandOptions<typeof AwsServerlessDataflow>;
+    const options = await this.parse() as CommandOptions<typeof AwsServerlessDataflow>; // as typeof AwsServerlessDataflow.Options
     if (options.flags['update-readme.md']) {
       OclifUtils.injectHelpTextIntoReadmeMd(this); // you need to have <!-- help start -->...<!-- help end --> in your README.md
       return;

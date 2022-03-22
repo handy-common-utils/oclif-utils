@@ -116,9 +116,9 @@ export const generateHelpText = OclifUtils.generateHelpText;
 export const injectHelpTextIntoReadmeMd = OclifUtils.injectHelpTextIntoReadmeMd;
 export const reconstructCommandLine = OclifUtils.reconstructCommandLine;
 
-export type CommandFlags<T> = T extends Interfaces.Input<infer F> ? F : never
-export type CommandArgNames<T> = T extends { name: infer A }[] ? A : never
-export type CommandArgs<T extends { args?: Array<{ name: string }> }> = {
+type CommandFlags<T> = T extends Interfaces.Input<infer F> ? F : never
+type CommandArgNames<T> = T extends { name: infer A }[] ? A : never
+type CommandArgs<T extends { args?: Array<{ name: string }> }> = {
   [x in CommandArgNames<T['args']>]: string;
 }
 export type CommandOptions<T extends { args?: Array<{ name: string }> }> = Interfaces.ParserOutput<CommandFlags<T>, CommandArgs<T>>;

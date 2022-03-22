@@ -3,6 +3,8 @@ import { OclifUtils, CommandOptions } from '../src/oclif-utils';
 import { expect } from 'chai';
 
 class TestCommand extends Command {
+  static Options: CommandOptions<typeof TestCommand>;
+
   static description = 'Visualisation of AWS serverless (Lambda, API Gateway, SNS, SQS, etc.) dataflow\n' +
     `This command line tool can visualise AWS serverless (Lambda, API Gateway, SNS, SQS, etc.) dataflow. 
 It generates website files locally and can optionally launch a local server for you to preview.`.replace(/\n/g, '') +
@@ -51,7 +53,7 @@ It generates website files locally and can optionally launch a local server for 
   }
 
   async run() {
-    const options = await this.parse() as CommandOptions<typeof TestCommand>;
+    const options = await this.parse() as CommandOptions<typeof TestCommand>; // typeof TestCommand.Options;
     testResultOptions = options;
     /*
     if (options.flags['update-readme.md']) {
