@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@handy-common-utils/dev-dependencies": "^1.1.1",
-    "@oclif/core": "^1.6.1",
+    "@oclif/core": "^1.6.4",
     "@types/fs-extra": "^8.1.1"
   },
   "publishConfig": {
