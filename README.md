@@ -42,14 +42,17 @@ import { Command, Flags } from '@oclif/core';
 import { OclifUtils, cliConsole, cliConsoleWithColour } from '@handy-common-utils/oclif-utils';
 
 class AwsServerlessDataflow extends Command {
-  // You can use "typeof AwsServerlessDataflow.Options" in other places to refer to the type
+  // You can use "typeof AwsServerlessDataflow.Options" in other places to refer to the type, if you want this convenience
   static Options: CommandOptions<typeof AwsServerlessDataflow>
 
   // ... other code ...
 
   static flags = {
     version: Flags.version({ char: 'v' }),
-    help: Flags.help({ char: 'h' }),
+    help: { ...Flags.help({ char: 'h' }), parse: async (_: any, cmd: Command) => {
+      cmd.log(await OclifUtils.generateHelpText(cmd));
+      cmd.exit(0);
+    } },
     'update-readme.md': flags.boolean({ hidden: true, description: 'For developers only, don\'t use' }),
     debug: Flags.boolean({ char: 'd', name: 'debug' }),
     // ... other code ...

@@ -13,7 +13,10 @@ It generates website files locally and can optionally launch a local server for 
 
   static flags = {
     version: Flags.version({ char: 'v' }),
-    help: Flags.help({ char: 'h' }),
+    help: { ...Flags.help({ char: 'h' }), parse: async (_: any, cmd: Command) => {
+      cmd.log(await OclifUtils.generateHelpText(cmd));
+      cmd.exit(0);
+    } },
     'update-readme.md': Flags.boolean({ hidden: true, description: 'For developers only, don\'t use' }),
 
     region: Flags.string({ char: 'r', description: 'AWS region (required if you don\'t have AWS_REGION environment variable configured)' }),
@@ -45,6 +48,10 @@ It generates website files locally and can optionally launch a local server for 
     `^ -r ap-southeast-2 -s -i '*lr-*' \\
       -i '*lead*' -x '*slack*' -x '*lead-prioritization*' \\
       -x '*lead-scor*' -x '*LeadCapture*' -c`,
+    {
+      description: 'this command line shows how to run it',
+      command: '^ . -r ap-southeast-2 -s',
+    },
   ];
 
   protected async init() {
@@ -55,6 +62,14 @@ It generates website files locally and can optionally launch a local server for 
   async run() {
     const options = await this.parse() as CommandOptions<typeof TestCommand>; // typeof TestCommand.Options;
     testResultOptions = options;
+
+    if (testResultExitCode !== undefined) {
+      return;
+    }
+
+    this.log(options.args.depth);
+    this.log(options.args.path);
+
     /*
     if (options.flags['update-readme.md']) {
       OclifUtils.injectHelpTextIntoReadmeMd(this);
@@ -68,11 +83,21 @@ It generates website files locally and can optionally launch a local server for 
     const commandLine = OclifUtils.reconstructCommandLine(this, options);
     testResultCommandLine = commandLine;
   }
+
+  log(message: string, ..._args: any[]): void {
+    testResultLastLog = message;
+  }
+
+  exit(code: number) {
+    testResultExitCode = code;
+  }
 }
 
 let testResultOptions: CommandOptions<typeof TestCommand>;
 let testResultHelpText: string;
 let testResultCommandLine: string;
+let testResultLastLog: string;
+let testResultExitCode: number;
 
 describe('OclifUtils', () => {
   it('should parseCommandLine(...) work', async () => {
@@ -135,6 +160,28 @@ describe('OclifUtils', () => {
     expect(testResultHelpText).to.include('Visualisation of AWS serverless');
     expect(testResultHelpText).to.include('This tool is free and open source');
     expect(testResultHelpText).to.include('EXAMPLES');
+    expect(testResultHelpText).to.include('this command line shows how to run it');
     expect(testResultHelpText).to.include('$ @handy-common-utils/oclif-utils -r ap-southeast-2 -s');
+  });
+
+  it('should -v work', async () => {
+    await TestCommand.run([
+      '-v',
+    ]);
+    expect(testResultExitCode).to.equal(0);
+    expect(testResultLastLog).to.include('@handy-common-utils/oclif-utils');
+  });
+
+  it('should --help work', async () => {
+    await TestCommand.run([
+      '--help',
+    ]);
+    // console.log(testResultLastLog);
+    expect(testResultExitCode).to.equal(0);
+    expect(testResultLastLog).to.include('USAGE');
+    expect(testResultLastLog).to.include('ARGUMENTS');
+    expect(testResultLastLog).to.include('FLAGS');
+    expect(testResultLastLog).to.include('DESCRIPTION');
+    expect(testResultLastLog).to.include('EXAMPLES');
   });
 });

@@ -30,14 +30,15 @@ export class OclifUtils {
   }
 
   /**
-   * Use this function to prepend command line to examples.
+   * Use this function to prepend command line to examples,
+   * so that we don't have to hard code command name in the examples.
    * This function needs to be called from `init()` function of the Command.
    * @param commandInstance instance of the Command
    * @return void
    */
   static prependCliToExamples(commandInstance: Command): void {
     const cmd = commandInstance.ctor as any as Interfaces.Command.Class;
-    if (Array.isArray(cmd.examples)) {  // so that we don't have to hard code command name in the examples
+    if (Array.isArray(cmd.examples)) {
       const prepend = (s: string) => (s && s.startsWith('^ ')) ? s.replace('^', commandInstance.config.bin) : s;
       // eslint-disable-next-line unicorn/no-array-for-each
       cmd.examples.forEach((example, index, examples) => {  // replace in place
