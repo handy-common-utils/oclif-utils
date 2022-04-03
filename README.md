@@ -314,7 +314,8 @@ ___
 
 ▸ `Static` **prependCliToExamples**(`commandInstance`): `void`
 
-Use this function to prepend command line to examples.
+Use this function to prepend command line to examples,
+so that we don't have to hard code command name in the examples.
 This function needs to be called from `init()` function of the Command.
 
 ###### Parameters
