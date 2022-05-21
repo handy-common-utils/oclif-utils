@@ -4,7 +4,7 @@
   "description": "oclif related utilities",
   "scripts": {
     "pretest": "eslint . --ext .ts",
-    "test": "nyc mocha -r ts-node/register test/**/*spec.ts",
+    "test": "nyc mocha",
     "prepare": "shx rm -rf dist && tsc && es-check",
     "preversion": "generate-api-docs-and-update-readme && git add README.md"
   },
@@ -20,7 +20,7 @@
     "fs-extra": "^9.0.1"
   },
   "devDependencies": {
-    "@handy-common-utils/dev-dependencies": "^1.1.1",
+    "@handy-common-utils/dev-dependencies": "^1.1.2",
     "@oclif/core": "^1.6.4",
     "@types/fs-extra": "^8.1.1"
   },
