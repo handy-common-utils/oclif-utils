@@ -111,142 +111,121 @@ import { prependCliToExamples } from '@handy-common-utils/oclif-utils';
 <!-- API start -->
 <a name="readmemd"></a>
 
-## @handy-common-utils/oclif-utils
+## Module: oclif-utils
 
-### Modules
+### Classes
 
-- [cli-console](#modulescli_consolemd)
-- [oclif-utils](#modulesoclif_utilsmd)
+- [OclifUtils](#classesoclif_utilsoclifutilsmd)
 
-## Classes
+### Type aliases
 
+#### CommandOptions
 
-<a name="classescli_consolecliconsolemd"></a>
+Ƭ **CommandOptions**<`T`\>: `Interfaces.ParserOutput`<`CommandFlags`<`T`\>, `CommandArgs`<`T`\>\>
 
-### Class: CliConsole<DEBUG_FUNC, INFO_FUNC, WARN_FUNC, ERROR_FUNC\>
-
-[cli-console](#modulescli_consolemd).CliConsole
-
-Encapsulation of console output functions.
-
-#### Type parameters
+##### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `DEBUG_FUNC` | extends `Function` |
-| `INFO_FUNC` | extends `Function` |
-| `WARN_FUNC` | extends `Function` |
-| `ERROR_FUNC` | extends `Function` |
+| `T` | extends `Object` |
 
-#### Constructors
+### Functions
 
-##### constructor
+#### generateHelpText
 
-• **new CliConsole**<`DEBUG_FUNC`, `INFO_FUNC`, `WARN_FUNC`, `ERROR_FUNC`\>(`debugFunction`, `infoFunction`, `warnFunction`, `errorFunction`, `isDebug?`, `isQuiet?`)
+▸ **generateHelpText**(`commandInstance`, `options?`): `Promise`<`string`\>
 
-Constructor
-
-###### Type parameters
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `DEBUG_FUNC` | extends `Function` |
-| `INFO_FUNC` | extends `Function` |
-| `WARN_FUNC` | extends `Function` |
-| `ERROR_FUNC` | extends `Function` |
+| `commandInstance` | `default` |
+| `options?` | `HelpOptions` |
 
-###### Parameters
+##### Returns
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `debugFunction` | `DEBUG_FUNC` | `undefined` | function for outputting debug information |
-| `infoFunction` | `INFO_FUNC` | `undefined` | function for outputting info information |
-| `warnFunction` | `WARN_FUNC` | `undefined` | function for outputting warn information |
-| `errorFunction` | `ERROR_FUNC` | `undefined` | function for outputting error information |
-| `isDebug` | `boolean` | `false` | is debug output enabled or not |
-| `isQuiet` | `boolean` | `false` | is quiet mode enabled or not. When quiet mode is enabled, debug and info output would be discarded. |
-
-#### Properties
-
-| Property | Description |
-| --- | --- |
-| • **debug**: `DEBUG_FUNC` |  |
-| • **error**: `ERROR_FUNC` |  |
-| • **info**: `INFO_FUNC` |  |
-| • **isDebug**: `boolean` = `false` |  |
-| • **isQuiet**: `boolean` = `false` |  |
-| • **warn**: `WARN_FUNC` |  |
-| ▪ `Static` `Protected` **NO\_OP\_FUNC**: () => `void` | **Type declaration:**<br>▸ (): `void`<br><br>**Returns:**<br>`void` |
-
-
-#### Methods
-
-##### default
-
-▸ `Static` **default**<`FLAGS`\>(`flags`, `debugFlagName?`, `quietFlagName?`): [`CliConsole`](#classescli_consolecliconsolemd)<(`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`\>
-
-Build an instance with console.log/info/warn/error.
-
-###### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `FLAGS` | extends `Record`<`string`, `any`\> |
-
-###### Parameters
-
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `flags` | `FLAGS` | `undefined` | The flag object that contains fields for knowning whether debug is enabled and whether quiet mode is enabled. Those fields are evaluated only once within the function. They are not evaluated when debug/info/warn/error functions are called. |
-| `debugFlagName` | keyof `FLAGS` | `'debug'` | Name of the debug field in the flags object |
-| `quietFlagName` | keyof `FLAGS` | `'quiet'` | Name of the quiet field in the flags object |
-
-###### Returns
-
-[`CliConsole`](#classescli_consolecliconsolemd)<(`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`\>
-
-An instance that uses console.log/info/warn/error.
+`Promise`<`string`\>
 
 ___
 
-##### withColour
+#### getCommandConfig
 
-▸ `Static` **withColour**<`FLAGS`, `COLOURER`\>(`flags`, `colourer`, `debugColourFuncName?`, `infoColourFuncName?`, `warnColourFuncName?`, `errorColourFuncName?`, `debugFlagName?`, `quietFlagName?`): [`CliConsole`](#classescli_consolecliconsolemd)<(`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`\>
+▸ **getCommandConfig**(`commandInstance`): `Promise`<`Command`\>
 
-Build an instance with console.log/info/warn/error and chalk/colors/cli-color.
-
-###### Type parameters
+##### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `FLAGS` | extends `Record`<`string`, `any`\> |
-| `COLOURER` | extends `Record`<`string`, `any`\> |
+| `commandInstance` | `default` |
 
-###### Parameters
+##### Returns
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `flags` | `FLAGS` | `undefined` | The flag object that contains fields for knowning whether debug is enabled and whether quiet mode is enabled. Those fields are evaluated only once within the function. They are not evaluated when debug/info/warn/error functions are called. |
-| `colourer` | `COLOURER` | `undefined` | Supplier of the colouring function, such as chalk or colors or cli-color |
-| `debugColourFuncName` | keyof `COLOURER` | `'grey'` | Name of the function within colourer that will be used to add colour to debug messages, or null if colouring is not desired. |
-| `infoColourFuncName?` | keyof `COLOURER` | `undefined` | Name of the function within colourer that will be used to add colour to info messages, or null if colouring is not desired. |
-| `warnColourFuncName` | keyof `COLOURER` | `'yellow'` | Name of the function within colourer that will be used to add colour to warn messages, or null if colouring is not desired. |
-| `errorColourFuncName` | keyof `COLOURER` | `'red'` | Name of the function within colourer that will be used to add colour to error messages, or null if colouring is not desired. |
-| `debugFlagName` | keyof `FLAGS` | `'debug'` | Name of the debug field in the flags object |
-| `quietFlagName` | keyof `FLAGS` | `'quiet'` | Name of the quiet field in the flags object |
+`Promise`<`Command`\>
 
-###### Returns
+___
 
-[`CliConsole`](#classescli_consolecliconsolemd)<(`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`\>
+#### injectHelpTextIntoReadmeMd
 
-An instance that uses console.log/info/warn/error and also adds colour to the messages using chalk/colors/cli-color.
+▸ **injectHelpTextIntoReadmeMd**(`commandInstance`, `options?`): `Promise`<`void`\>
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `commandInstance` | `default` |
+| `options?` | `HelpOptions` |
+
+##### Returns
+
+`Promise`<`void`\>
+
+___
+
+#### prependCliToExamples
+
+▸ **prependCliToExamples**(`commandInstance`): `void`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `commandInstance` | `default` |
+
+##### Returns
+
+`void`
+
+___
+
+#### reconstructCommandLine
+
+▸ **reconstructCommandLine**<`T`\>(`commandInstance`, `options`): `string`
+
+##### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends `Object` |
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `commandInstance` | `InstanceType`<`T`\> |
+| `options` | [`CommandOptions`](#commandoptions)<`T`\> |
+
+##### Returns
+
+`string`
+
+## Classes
 
 
 <a name="classesoclif_utilsoclifutilsmd"></a>
 
 ### Class: OclifUtils
 
-[oclif-utils](#modulesoclif_utilsmd).OclifUtils
+[oclif-utils](#readmemd).OclifUtils
 
 #### Constructors
 
@@ -356,195 +335,4 @@ Reconstruct the command line from already parsed options.
 `string`
 
 the command line string corresponding to the parsed options
-
-## Modules
-
-
-<a name="modulescli_consolemd"></a>
-
-### Module: cli-console
-
-#### Classes
-
-- [CliConsole](#classescli_consolecliconsolemd)
-
-#### Type aliases
-
-##### DefaultCliConsole
-
-Ƭ **DefaultCliConsole**: `ReturnType`<typeof [`default`](#default)\>
-
-CliConsole that has function signatures based on console.log/info/warn/error.
-
-#### Functions
-
-##### cliConsole
-
-▸ **cliConsole**<`FLAGS`\>(`flags`, `debugFlagName?`, `quietFlagName?`): [`CliConsole`](#classescli_consolecliconsolemd)<(`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`\>
-
-Build an encapsulation of console output functions with console.log/info/warn/error.
-
-###### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `FLAGS` | extends `Record`<`string`, `any`\> |
-
-###### Parameters
-
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `flags` | `FLAGS` | `undefined` | The flag object that contains fields for knowning whether debug is enabled and whether quiet mode is enabled. Those fields are evaluated only once within the function. They are not evaluated when debug/info/warn/error functions are called. |
-| `debugFlagName` | keyof `FLAGS` | `'debug'` | Name of the debug field in the flags object |
-| `quietFlagName` | keyof `FLAGS` | `'quiet'` | Name of the quiet field in the flags object |
-
-###### Returns
-
-[`CliConsole`](#classescli_consolecliconsolemd)<(`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`\>
-
-An CliConsole instance that uses console.log/info/warn/error.
-
-___
-
-##### cliConsoleWithColour
-
-▸ **cliConsoleWithColour**<`FLAGS`, `COLOURER`\>(`flags`, `colourer`, `debugColourFuncName?`, `infoColourFuncName?`, `warnColourFuncName?`, `errorColourFuncName?`, `debugFlagName?`, `quietFlagName?`): [`CliConsole`](#classescli_consolecliconsolemd)<(`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`\>
-
-Build an encapsulation of console output functions with console.log/info/warn/error and chalk/colors/cli-color.
-
-###### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `FLAGS` | extends `Record`<`string`, `any`\> |
-| `COLOURER` | extends `Record`<`string`, `any`\> |
-
-###### Parameters
-
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `flags` | `FLAGS` | `undefined` | The flag object that contains fields for knowning whether debug is enabled and whether quiet mode is enabled. Those fields are evaluated only once within the function. They are not evaluated when debug/info/warn/error functions are called. |
-| `colourer` | `COLOURER` | `undefined` | Supplier of the colouring function, such as chalk or colors or cli-color |
-| `debugColourFuncName` | keyof `COLOURER` | `'grey'` | Name of the function within colourer that will be used to add colour to debug messages, or null if colouring is not desired. |
-| `infoColourFuncName?` | keyof `COLOURER` | `undefined` | Name of the function within colourer that will be used to add colour to info messages, or null if colouring is not desired. |
-| `warnColourFuncName` | keyof `COLOURER` | `'yellow'` | Name of the function within colourer that will be used to add colour to warn messages, or null if colouring is not desired. |
-| `errorColourFuncName` | keyof `COLOURER` | `'red'` | Name of the function within colourer that will be used to add colour to error messages, or null if colouring is not desired. |
-| `debugFlagName` | keyof `FLAGS` | `'debug'` | Name of the debug field in the flags object |
-| `quietFlagName` | keyof `FLAGS` | `'quiet'` | Name of the quiet field in the flags object |
-
-###### Returns
-
-[`CliConsole`](#classescli_consolecliconsolemd)<(`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`, (`message?`: `any`, ...`optionalParams`: `any`[]) => `void`\>
-
-An CliConsole instance that uses console.log/info/warn/error and also adds colour to the messages using chalk/colors/cli-color.
-
-
-<a name="modulesoclif_utilsmd"></a>
-
-### Module: oclif-utils
-
-#### Classes
-
-- [OclifUtils](#classesoclif_utilsoclifutilsmd)
-
-#### Type aliases
-
-##### CommandOptions
-
-Ƭ **CommandOptions**<`T`\>: `Interfaces.ParserOutput`<`CommandFlags`<`T`\>, `CommandArgs`<`T`\>\>
-
-###### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `Object` |
-
-#### Functions
-
-##### generateHelpText
-
-▸ **generateHelpText**(`commandInstance`, `options?`): `Promise`<`string`\>
-
-###### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `commandInstance` | `default` |
-| `options?` | `HelpOptions` |
-
-###### Returns
-
-`Promise`<`string`\>
-
-___
-
-##### getCommandConfig
-
-▸ **getCommandConfig**(`commandInstance`): `Promise`<`Command`\>
-
-###### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `commandInstance` | `default` |
-
-###### Returns
-
-`Promise`<`Command`\>
-
-___
-
-##### injectHelpTextIntoReadmeMd
-
-▸ **injectHelpTextIntoReadmeMd**(`commandInstance`, `options?`): `Promise`<`void`\>
-
-###### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `commandInstance` | `default` |
-| `options?` | `HelpOptions` |
-
-###### Returns
-
-`Promise`<`void`\>
-
-___
-
-##### prependCliToExamples
-
-▸ **prependCliToExamples**(`commandInstance`): `void`
-
-###### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `commandInstance` | `default` |
-
-###### Returns
-
-`void`
-
-___
-
-##### reconstructCommandLine
-
-▸ **reconstructCommandLine**<`T`\>(`commandInstance`, `options`): `string`
-
-###### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `Object` |
-
-###### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `commandInstance` | `InstanceType`<`T`\> |
-| `options` | [`CommandOptions`](#commandoptions)<`T`\> |
-
-###### Returns
-
-`string`
 <!-- API end -->
