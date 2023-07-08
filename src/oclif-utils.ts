@@ -1,14 +1,18 @@
-import * as fs from 'fs-extra';
-import { Help, Command, toCached, Interfaces } from '@oclif/core';
+import { Help, Command, Interfaces } from '@oclif/core';
+import { replaceInFile } from '@handy-common-utils/fs-utils';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Input, OutputFlags, ParserOutput } from '@oclif/core/lib/interfaces/parser';
 
+/**
+ * Helper class to utilise protected method formatCommand(...) in the parent class
+ */
 class HelpHelper extends Help {
   constructor(protected commandInstance: Command, options?: Interfaces.HelpOptions) {
     super(commandInstance.config as Interfaces.Config, options);
   }
 
   async generateHelpText() {
-    const cmd = await getCommandConfig(this.commandInstance);
-    const helpText = this.formatCommand(cmd);
+    const helpText = this.formatCommand(this.commandInstance.constructor as any);
     return helpText;
   }
 }
@@ -20,106 +24,71 @@ const quoteIfNeeded = (text: any) => {
   return `'${text}'`;
 };
 
-export class OclifUtils {
-  static async getCommandConfig(commandInstance: Command): Promise<Interfaces.Command> {
-    const cmd = await toCached(commandInstance.ctor as any as Interfaces.Command.Class);
-    if (cmd.id === undefined) {
-      cmd.id = '';
-    }
-    return cmd;
+/**
+ * Generate formatted text content of help to a command
+ * @param commandInstance instance of the Command
+ * @param options (optional) format options
+ * @return help content
+ */
+export function generateHelpText(commandInstance: Command, options?: Partial<Interfaces.HelpOptions>): Promise<string> {
+  const helper = new HelpHelper(commandInstance, {
+    stripAnsi: true,
+    maxWidth: 80,
+    ...options,
+  });
+  return helper.generateHelpText();
+}
+
+/**
+ * Replace the help text in the `README.md` file.
+ * Help text is marked by `<!-- help start -->` and `<!-- help end -->`.
+ * @param commandInstance instance of the Command
+ * @param options (optional) format options
+ * @returns void
+ */
+export async function injectHelpTextIntoReadmeMd(commandInstance: Command, options?: Partial<Interfaces.HelpOptions>): Promise<void> {
+  const helpText = await generateHelpText(commandInstance, options);
+  const helpTextMd = '```\n' + helpText + '\n```\n';
+
+  const fileName = 'README.md';
+  const helpStart = '<!-- help start -->';
+  const helpEnd = '<!-- help end -->';
+  await replaceInFile(fileName, new RegExp(`${helpStart}(.|\n)*${helpEnd}`, 'm'), `${helpStart}\n${helpTextMd}\n${helpEnd}`);
+}
+
+/**
+ * Reconstruct the command line from already parsed options.
+ * @param commandInstance When calling from the subclass of `Command`, just pass `this`
+ * @param options Already parsed options. When calling from the subclass of `Command`, it is the return value of `this.parse(...)`.
+ * @returns the command line string corresponding to the parsed options
+ */
+export function reconstructCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any}>(commandInstance: InstanceType<T>, options: Awaited<ReturnType<Command['parse']>>): string {
+  const args = new Array<string>();
+  args.push(commandInstance.config.bin);
+  if (options.argv?.length > 0) {
+    args.push(...options.argv.map((x: any) => quoteIfNeeded(x)));
   }
-
-  /**
-   * Use this function to prepend command line to examples,
-   * so that we don't have to hard code command name in the examples.
-   * This function needs to be called from `init()` function of the Command.
-   * @param commandInstance instance of the Command
-   * @return void
-   */
-  static prependCliToExamples(commandInstance: Command): void {
-    const cmd = commandInstance.ctor as any as Interfaces.Command.Class;
-    if (Array.isArray(cmd.examples)) {
-      const prepend = (s: string) => (s && s.startsWith('^ ')) ? s.replace('^', commandInstance.config.bin) : s;
-      // eslint-disable-next-line unicorn/no-array-for-each
-      cmd.examples.forEach((example, index, examples) => {  // replace in place
-        if (typeof example === 'string') {
-          examples[index] = prepend(example);
-        } else if (example?.command) {
-          example.command = prepend(example.command);
-        }
-      });
-    }
-  }
-
-  /**
-   * Generate formatted text content of help to a command
-   * @param commandInstance instance of the Command
-   * @param options format options
-   * @return help content
-   */
-  static generateHelpText(commandInstance: Command, options?: Interfaces.HelpOptions): Promise<string> {
-    const helper = new HelpHelper(commandInstance, {
-      stripAnsi: true,
-      maxWidth: 80,
-      ...options,
-    });
-    return helper.generateHelpText();
-  }
-
-  static async injectHelpTextIntoReadmeMd(commandInstance: Command, options?: Interfaces.HelpOptions): Promise<void> {
-    const helpText = await OclifUtils.generateHelpText(commandInstance, options);
-    const helpTextMd = '```\n' + helpText + '\n```\n';
-
-    const fileName = 'README.md';
-    const helpStart = '<!-- help start -->';
-    const helpEnd = '<!-- help end -->';
-    let fileContent = await fs.readFile(fileName, 'utf8');
-    fileContent = fileContent.replace(new RegExp(`${helpStart}(.|\n)*${helpEnd}`, 'm'), `${helpStart}\n${helpTextMd}\n${helpEnd}`);
-    await fs.outputFile(fileName, fileContent);
-  }
-
-  /**
-   * Reconstruct the command line from already parsed options.
-   * @param commandInstance When calling from the subclass of `Command`, just pass `this`
-   * @param options Already parsed options. It can be got with `const options = await OclifUtils.parseCommandLine(commandInstance);`
-   * @returns the command line string corresponding to the parsed options
-   */
-  static reconstructCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any}>(commandInstance: InstanceType<T>, options: CommandOptions<T>): string {
-    const args = new Array<string>();
-    args.push(commandInstance.config.bin);
-    if (options.argv?.length > 0) {
-      args.push(...options.argv.map((x: string) => quoteIfNeeded(x)));
-    }
-    if (options.flags) {
-      for (const flagName of Object.keys(options.flags)) {
-        const flagValue = options.flags[flagName];
-        if (flagValue !== false) {  // no need if the flag is not toggled on
-          args.push(`--${flagName}`);
-          if (typeof flagValue !== 'boolean') {
-            if (Array.isArray(flagValue)) {
-              for (const value of flagValue) {
-                args.push(`${quoteIfNeeded(value)}`);
-              }
-            } else {
-              args.push(`${quoteIfNeeded(flagValue)}`);
+  if (options.flags) {
+    for (const flagName of Object.keys(options.flags)) {
+      const flagValue = options.flags[flagName];
+      if (flagValue !== false) {  // no need if the flag is not toggled on
+        args.push(`--${flagName}`);
+        if (typeof flagValue !== 'boolean') {
+          if (Array.isArray(flagValue)) {
+            for (const value of flagValue) {
+              args.push(`${quoteIfNeeded(value)}`);
             }
+          } else {
+            args.push(`${quoteIfNeeded(flagValue)}`);
           }
         }
       }
     }
-    return args.join(' ');
   }
+  return args.join(' ');
 }
 
-export const getCommandConfig = OclifUtils.getCommandConfig;
-export const prependCliToExamples = OclifUtils.prependCliToExamples;
-export const generateHelpText = OclifUtils.generateHelpText;
-export const injectHelpTextIntoReadmeMd = OclifUtils.injectHelpTextIntoReadmeMd;
-export const reconstructCommandLine = OclifUtils.reconstructCommandLine;
-
-type CommandFlags<T> = T extends Interfaces.Input<infer F> ? F : never
-type CommandArgNames<T> = T extends { name: infer A }[] ? A : never
-type CommandArgs<T extends { args?: Array<{ name: string }> }> = {
-  [x in CommandArgNames<T['args']>]: string;
-}
-export type CommandOptions<T extends { args?: Array<{ name: string }> }> = Interfaces.ParserOutput<CommandFlags<T>, CommandArgs<T>>;
+type FBA<C> = C extends Input<infer F, infer B, infer A> ? [F, B, A] : never;
+type ParsedOutput<FBA> = FBA extends [infer F extends OutputFlags<any>, infer B extends OutputFlags<any>, infer A extends OutputFlags<any>] ? ParserOutput<F, B, A> : never;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export type CommandOptions<C> = C extends Input<infer _F extends OutputFlags<any>, infer _B extends OutputFlags<any>, infer _A extends OutputFlags<any>> ? Awaited<ParsedOutput<FBA<C>>> : never;

@@ -11,11 +11,9 @@ oclif (https://oclif.io/) related utilities
 
 With this utility library, you will be able to:
 
-* Make type information of `options.args` available
-* Update README.md file by `./bin/run --update-readme.md` for inserting properly formated CLI manual information
-* Prepend command line name to the examples
-* Reconstruct the full command line as a string
-* Handy `CliConsole` for logging with and without colouring
+- Convenient `CommandOptions<typeof YourCommand>` type for referring to the return type of `await this.parse(YourCommand)`
+- Update README.md file by `./bin/run --update-readme.md` for inserting properly formatted CLI manual information
+- Reconstruct the full command line as a string
 
 ## How to use
 
@@ -27,12 +25,10 @@ just add latest version of this package as dependency:
 npm install @handy-common-utils/oclif-utils@latest
 ```
 
-Otherwise if the versions of oclif components you are using are older (that means you are still using @oclif/config, @oclif/command, @oclif/parser),
-you need to use the older version of this package:
+Otherwise if the versions of oclif components you are using are older (@oclif/core@1.9.0, @oclif/plugin-plugins@2.1.0, @oclif/plugin-help@5.1.12, oclif@3.0.1),
+you need to use version `1.1.3` of this package.
+Or if you are using really old versions of oclif components (that means you are still using @oclif/config, @oclif/command, @oclif/parser), you need to use version `1.0.9` of this package.
 
-```sh
-npm install @handy-common-utils/oclif-utils@1.0.9
-```
 
 
 Then you can use it in the code:
