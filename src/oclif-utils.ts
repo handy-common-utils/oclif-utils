@@ -1,6 +1,5 @@
-import { Help, Command, Interfaces } from '@oclif/core';
 import { replaceInFile } from '@handy-common-utils/fs-utils';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Command, Help, Interfaces } from '@oclif/core';
 import { Input, OutputFlags, ParserOutput } from '@oclif/core/lib/interfaces/parser';
 
 /**
@@ -30,13 +29,34 @@ const quoteIfNeeded = (text: any) => {
  * @param options (optional) format options
  * @return help content
  */
-export function generateHelpText(commandInstance: Command, options?: Partial<Interfaces.HelpOptions>): Promise<string> {
+export function generateHelpText<T extends Command>(commandInstance: T, options?: Partial<Interfaces.HelpOptions>): Promise<string> {
   const helper = new HelpHelper(commandInstance, {
     stripAnsi: true,
     maxWidth: 80,
     ...options,
   });
   return helper.generateHelpText();
+}
+
+export async function withHelpHandled<T extends { argv: string[]; log: Command['log']; exit: Command['exit']; new(...args: any): any}, O>(commandInstance: InstanceType<T>, parse: () => Promise<O>, options?: Partial<Interfaces.HelpOptions>): Promise<O> {
+  const firstArg = commandInstance.argv?.[0];
+  if (commandInstance.argv?.length === 1 && (firstArg === '--help' || firstArg === '-h')) {
+    async function printPrettyHelp() {
+      const helpText = await generateHelpText(commandInstance, options);
+      commandInstance.log(helpText);
+    }
+
+    try {
+      await printPrettyHelp();
+    } catch {
+      try {
+        await parse();
+      } catch {}
+      await printPrettyHelp();
+    }
+    commandInstance.exit(0);
+  }
+  return parse();
 }
 
 /**
