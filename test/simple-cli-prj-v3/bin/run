@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+const path = require('path')
+const project = path.join(__dirname, '..', 'tsconfig.json')
+require('ts-node').register({project})
+
+const oclif = require('@oclif/core')
+oclif.settings.debug = true;
+
+require('../src').run()
+.then(require('@oclif/core/flush')).catch(require('@oclif/core/handle'))
