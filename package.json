@@ -22,7 +22,8 @@
   "devDependencies": {
     "@handy-common-utils/dev-dependencies-mocha": "^1.5.4",
     "@oclif/test": "^2.3.26",
-    "oclif": "^3.9.1"
+    "oclif": "^3.9.1",
+    "zx": "^4.3.0"
   },
   "publishConfig": {
     "access": "public"
