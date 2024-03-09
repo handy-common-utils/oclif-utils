@@ -21,7 +21,7 @@ hello friend from oclif! (./src/commands/hello/index.ts)
   }
 
   async run(): Promise<void> {
-    const options = await withHelpHandled(this, () => this.parse());
+    const options = await withHelpHandled(this, () => this.parse(Hello));
 
     const {args, flags} = options
 
