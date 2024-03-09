@@ -9,7 +9,6 @@
     "preversion": "generate-api-docs-and-update-readme && git add README.md"
   },
   "files": [
-    "package.json",
     "dist"
   ],
   "main": "dist/index.js",
@@ -44,9 +43,7 @@
   "author": "James Hu",
   "license": "Apache-2.0",
   "peerDependencies": {
-    "@oclif/core": ">=2",
-    "@oclif/plugin-help": ">=5",
-    "@oclif/plugin-plugins": ">=2"
+    "@oclif/core": ">=2"
   },
   "volta": {
     "node": "16.20.0",
