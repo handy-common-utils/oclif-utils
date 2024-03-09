@@ -1,5 +1,5 @@
 import {Args, Command, Flags} from '@oclif/core'
-import { generateHelpText, reconstructCommandLine, withHelpHandled } from '../../../src'
+import { reconstructCommandLine, withHelpHandled } from '../../../src'
 
 class Hello extends Command {
   static description = 'Say hello'
