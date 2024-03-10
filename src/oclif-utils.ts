@@ -39,24 +39,30 @@ export function generateHelpText<T extends Command>(commandInstance: T, options?
 }
 
 export async function withHelpHandled<T extends { argv: string[]; log: Command['log']; exit: Command['exit']; new(...args: any): any}, O>(commandInstance: InstanceType<T>, parse: () => Promise<O>, options?: Partial<Interfaces.HelpOptions>): Promise<O> {
-  const firstArg = commandInstance.argv?.[0];
-  if (commandInstance.argv?.length === 1 && (firstArg === '--help' || firstArg === '-h')) {
-    async function printPrettyHelp() {
+  let cliOptions;
+  let parsingError;
+  try {
+    cliOptions = await parse();
+  } catch (error) {
+    parsingError = error;
+  }
+
+  const onlyArg = commandInstance.argv?.length === 1 ? commandInstance.argv[0] : undefined;
+  switch(onlyArg) {
+    case '--help':
+    case '-h': {
       const helpText = await generateHelpText(commandInstance, options);
       commandInstance.log(helpText);
+      commandInstance.exit(0);
+      break;
     }
-
-    try {
-      await printPrettyHelp();
-    } catch {
-      try {
-        await parse();
-      } catch {}
-      await printPrettyHelp();
-    }
-    commandInstance.exit(0);
   }
-  return parse();
+
+  if (cliOptions) {
+    return cliOptions;
+  } else {
+    throw parsingError;
+  }
 }
 
 /**
