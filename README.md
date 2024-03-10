@@ -11,100 +11,118 @@ oclif (https://oclif.io/) related utilities
 
 With this utility library, you will be able to:
 
-* Make type information of `options.args` available
-* Update README.md file by `./bin/run --update-readme.md` for inserting properly formated CLI manual information
-* Prepend command line name to the examples
-* Reconstruct the full command line as a string
-* Handy `CliConsole` for logging with and without colouring
+- Print out pretty full help/usage information
+- Reconstruct the full command line as a string
+- Insert help/usage information into `README.md` file automatically
 
-## How to use
+## Installation
 
-If you are using latest versions of
-[@oclif/core](https://github.com/oclif/core)([introduction](https://oclif.io/blog/2021/03/01/introducing-oclif-core), [migration](https://github.com/oclif/core/blob/main/MIGRATION.md)), 
-just add latest version of this package as dependency:
+This library has been verified to be working with
+[@oclif/core](https://github.com/oclif/core) v2 and v3, 
+you just need to add it as a dependency:
 
 ```sh
 npm install @handy-common-utils/oclif-utils@latest
 ```
 
-Otherwise if the versions of oclif components you are using are older (that means you are still using @oclif/config, @oclif/command, @oclif/parser),
-you need to use the older version of this package:
+If the versions of oclif components you are using are older (For example, @oclif/core@1.9.0, @oclif/plugin-plugins@2.1.0, @oclif/plugin-help@5.1.12, oclif@3.0.1),
+you need to use version `1.1.3` of this package.
+Or if you are using really old versions of oclif components (that means you are still using @oclif/config, @oclif/command, @oclif/parser), you need to use version `1.0.9` of this package.
 
-```sh
-npm install @handy-common-utils/oclif-utils@1.0.9
-```
+## Usage
 
+### Print out full help/usage information
 
-Then you can use it in the code:
+The function `withEnhancedFlagsHandled(...)` checks whether '-h' or '--help' is the only command line argument.
+If that is the case, it will build the help information, print it out, then exit with exit code 0.
+In such case, your command processing code after it won't get executed.
+
+To use it, just need to add this as the first line in the `run()` function of your command class:
 
 ```javascript
-import { Command, Flags } from '@oclif/core';
-import { OclifUtils, cliConsole, cliConsoleWithColour } from '@handy-common-utils/oclif-utils';
+const options = await withEnhancedFlagsHandled(this, () => this.parse(<Your command class name>));
+```
 
-class AwsServerlessDataflow extends Command {
-  // You can use "typeof AwsServerlessDataflow.Options" in other places to refer to the type, if you want this convenience
-  static Options: CommandOptions<typeof AwsServerlessDataflow>
+And, the `--help`/`-h` flag needs to be defined, like this:
 
-  // ... other code ...
+```javascript
+static flags = {
+  ...enhancedFlags,
+  // your other flags
+};
+```
+
+Below is a full example:
+
+```typescript
+import { Command, Flags } from '@oclif/core'
+import { enhancedFlags, withEnhancedFlagsHandled } from '@handy-common-utils/oclif-utils';
+
+class Hello extends Command {
+  // Feel free to define description, examples, etc.
+  // They will be printed out as part of the help/usage information.
 
   static flags = {
-    version: Flags.version({ char: 'v' }),
-    help: { ...Flags.help({ char: 'h' }), parse: async (_: any, cmd: Command) => {
-      cmd.log(await OclifUtils.generateHelpText(cmd));
-      cmd.exit(0);
-    } },
-    'update-readme.md': flags.boolean({ hidden: true, description: 'For developers only, don\'t use' }),
-    debug: Flags.boolean({ char: 'd', name: 'debug' }),
-    // ... other code ...
+    ...enhancedFlags,
+    // and other flags ...
   }
 
-  static args = [
-    { name: 'path' as const, default: 'dataflow', description: 'path for putting generated website files' },
-    //             ^----- this is needed for the "path" property of options.args to be known to the compiler
-  ];
-
-  static examples = [
-    '^ -r ap-southeast-2 -s',
-    `^ -r ap-southeast-2 -s -i '*boi*' -i '*datahub*' \\
-      -x '*jameshu*' -c`,
-    `^ -r ap-southeast-2 -s -i '*lr-*' \\
-      -i '*lead*' -x '*slack*' -x '*lead-prioritization*' \\
-      -x '*lead-scor*' -x '*LeadCapture*' -c`,
-  ];
-
-  protected async init(): Promise<any> {
-    OclifUtils.prependCliToExamples(this);  // "^" at the beginning of the examples will be replaced by the actual command
-    return super.init();
-  }
+  // and args ...
 
   async run(): Promise<void> {
-    const options = await this.parse() as CommandOptions<typeof AwsServerlessDataflow>; // as typeof AwsServerlessDataflow.Options
-    if (options.flags['update-readme.md']) {
-      OclifUtils.injectHelpTextIntoReadmeMd(this); // you need to have <!-- help start -->...<!-- help end --> in your README.md
-      return;
-    }
-    // This would be helpful if a complex command line needs to be shared
-    if (options.flags.debug) {
-      cliConsoleWithColour.info(`Command line: ${OclifUtils.reconstructCommandLine(this, options)}`);
-    }
+    const options = await withEnhancedFlagsHandled(this, () => this.parse(Hello));
 
-    // Now the compiler knows that options.args has a property named "path"
-    cliConsole.log(options.args.path);
-
-    // You can add this in the scripts section of your package.json:  "preversion": "./bin/run --update-readme.md && git add README.md"
-
-    // ... other code ...
+    // your command processing code ...
   }
 }
-export = AwsServerlessDataflow
 ```
 
-You can either import and use the [class](#classes) as shown above,
-or you can import individual [functions](#variables) directly like below:
+### Reconstruct the full command line as a string
+
+Sometimes it would be useful to record or print out the full command line.
+The `reconstructCommandLine(...)` can return a string containing the full command line.
+
+Below is an example:
 
 ```javascript
-import { prependCliToExamples } from '@handy-common-utils/oclif-utils';
+import { Command, Flags } from '@oclif/core'
+import { reconstructCommandLine, withEnhancedFlagsHandled } from '@handy-common-utils/oclif-utils';
+
+class Hello extends Command {
+  // other code ...
+
+  async run(): Promise<void> {
+    const options = await withEnhancedFlagsHandled(this, () => this.parse(Hello));
+    const fullCommandLine = reconstructCommandLine(this, options);
+
+    // your command processing code ...
+  }
+}
 ```
+
+### Insert help/usage information into `README.md`
+
+In many occasions it would be handy if help/usage information can be inserted into `README.md` automatically.
+This can be achieved in two steps.
+
+__Step 1: Add `--update-readme.md` support in your command__
+
+As long as `enhancedFlags` and `withEnhancedFlagsHandled(...)` are used, then `--update-readme.md` is supported automatically.
+See the examples above for details.
+
+__Step 2: Run `./bin/run --update-readme.md` as part of your workflow__
+
+In your CI/CD workflow, you can just run your command with `--update-readme.md`, then the command will update `README.md` automatically.
+You may want to commit the change to `README.md` after it is updated.
+
+Below are example scripts in `package.json`:
+
+```json
+  "scripts": {
+    "preversion": "./bin/run --update-readme.md && git add README.md"
+  },
+```
+
 
 # API
 
