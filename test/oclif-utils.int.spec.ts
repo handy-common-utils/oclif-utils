@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import * as fs from 'node:fs';
 import { $, ProcessOutput } from 'zx';
 
 function runWithinDir(dir: string): (cmd: string) => Promise<ProcessOutput> {
@@ -58,6 +59,22 @@ describe('OclifUtils used in test projects', () => {
         const outcome = await runWithinPrj('./bin/run me -h');
         expect(outcome.exitCode).to.equal(2);
         expect(outcome.stderr).to.contain('Missing required flag');
+      });
+
+      it('updates README.md when there is only --update-readme.md', async () => {
+        const readmeFile = `test/simple-cli-prj-v${v}/README.md`;
+        fs.writeFileSync(readmeFile, '# Sample README\n## Manual\n<!-- help start -->\n<!-- help end -->\n');
+
+        const outcome = await runWithinPrj('./bin/run --update-readme.md');
+        expect(outcome.exitCode).to.equal(0);
+
+        const readmeFileContent = fs.readFileSync(readmeFile, 'utf8');
+        expect(readmeFileContent).to.contain('# Sample README');
+        expect(readmeFileContent).to.contain('USAGE');
+        expect(readmeFileContent).to.contain('ARGUMENTS');
+        expect(readmeFileContent).to.contain('FLAGS');
+        expect(readmeFileContent).to.contain('DESCRIPTION');
+        expect(readmeFileContent).to.contain('EXAMPLES');
       });
     });  
   }

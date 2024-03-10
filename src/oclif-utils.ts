@@ -1,5 +1,5 @@
 import { replaceInFile } from '@handy-common-utils/fs-utils';
-import { Command, Help, Interfaces } from '@oclif/core';
+import { Command, Flags, Help, Interfaces } from '@oclif/core';
 import { Input, OutputFlags, ParserOutput } from '@oclif/core/lib/interfaces/parser';
 
 /**
@@ -38,7 +38,29 @@ export function generateHelpText<T extends Command>(commandInstance: T, options?
   return helper.generateHelpText();
 }
 
-export async function withHelpHandled<T extends { argv: string[]; log: Command['log']; exit: Command['exit']; new(...args: any): any}, O>(commandInstance: InstanceType<T>, parse: () => Promise<O>, options?: Partial<Interfaces.HelpOptions>): Promise<O> {
+/**
+ * Flags of '--help'/'-h' and '--update-readme.md'
+ */
+export const enhancedFlags = {
+  help: Flags.boolean({ required: false, char: 'h', description: 'Show help' }),
+  'update-readme.md': Flags.boolean({ hidden: true, required: false, description: 'For developers only, don\'t use' }),
+};
+
+/**
+ * Parse command line arguments, with enhanced flags handled
+ * @param commandInstance Instance of the command class, usually 'this'
+ * @param parse The function to call 'this.parse(<The class>)`
+ * @param helpOptions Optional options to customise the formatting of help text
+ * @param additionalHandler Optional additional handler
+ * @returns Output from 'this.parse(<The class>)'.
+ * @throws Error if the command line arguments are considered invalid by 'this.parse(<The class>)'.
+ */
+export async function withEnhancedFlagsHandled<T extends { argv: string[]; log: Command['log']; exit: Command['exit']; new(...args: any): any}, O>(
+  commandInstance: InstanceType<T>,
+  parse: () => Promise<O>,
+  helpOptions?: Partial<Interfaces.HelpOptions>,
+  additionalHandler?: (commandInstance: InstanceType<T>, cliOptions: O | undefined) => Promise<void>,
+): Promise<O> {
   let cliOptions;
   let parsingError;
   try {
@@ -51,11 +73,20 @@ export async function withHelpHandled<T extends { argv: string[]; log: Command['
   switch(onlyArg) {
     case '--help':
     case '-h': {
-      const helpText = await generateHelpText(commandInstance, options);
+      const helpText = await generateHelpText(commandInstance, helpOptions);
       commandInstance.log(helpText);
       commandInstance.exit(0);
       break;
     }
+    case '--update-readme.md': {
+      await injectHelpTextIntoReadmeMd(commandInstance);
+      commandInstance.exit(0);
+      break;
+    }
+  }
+
+  if (additionalHandler) {
+    await additionalHandler(commandInstance, cliOptions);
   }
 
   if (cliOptions) {
@@ -72,7 +103,7 @@ export async function withHelpHandled<T extends { argv: string[]; log: Command['
  * @param options (optional) format options
  * @returns void
  */
-export async function injectHelpTextIntoReadmeMd(commandInstance: Command, options?: Partial<Interfaces.HelpOptions>): Promise<void> {
+export async function injectHelpTextIntoReadmeMd<T extends Command>(commandInstance: T, options?: Partial<Interfaces.HelpOptions>): Promise<void> {
   const helpText = await generateHelpText(commandInstance, options);
   const helpTextMd = '```\n' + helpText + '\n```\n';
 
@@ -116,5 +147,8 @@ export function reconstructCommandLine<T extends { args: Array<{ name: string }>
 
 type FBA<C> = C extends Input<infer F, infer B, infer A> ? [F, B, A] : never;
 type ParsedOutput<FBA> = FBA extends [infer F extends OutputFlags<any>, infer B extends OutputFlags<any>, infer A extends OutputFlags<any>] ? ParserOutput<F, B, A> : never;
+/**
+ * Typical usage: `CommandOptions<typeof YourCommand>`
+ */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type CommandOptions<C> = C extends Input<infer _F extends OutputFlags<any>, infer _B extends OutputFlags<any>, infer _A extends OutputFlags<any>> ? Awaited<ParsedOutput<FBA<C>>> : never;

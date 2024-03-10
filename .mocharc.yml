@@ -1,5 +1,6 @@
 spec:
   - test/*.spec.ts
+timeout: 5000
 require:
   - source-map-support/register
   - ts-node/register

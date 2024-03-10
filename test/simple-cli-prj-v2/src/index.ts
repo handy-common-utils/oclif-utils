@@ -1,5 +1,5 @@
 import {Args, Command, Flags} from '@oclif/core'
-import { reconstructCommandLine, withHelpHandled } from '../../../src'
+import { enhancedFlags, reconstructCommandLine, withEnhancedFlagsHandled } from '../../../src'
 
 class Hello extends Command {
   static description = 'Say hello'
@@ -11,7 +11,7 @@ hello friend from oclif! (./src/commands/hello/index.ts)
   ]
 
   static flags = {
-    help: Flags.boolean({char: 'h'}),
+    ...enhancedFlags,
     gen: Flags.boolean({char: 'g'}),
     from: Flags.string({char: 'f', description: 'Who is saying hello', required: true}),
   }
@@ -21,7 +21,7 @@ hello friend from oclif! (./src/commands/hello/index.ts)
   }
 
   async run(): Promise<void> {
-    const options = await withHelpHandled(this, () => this.parse(Hello));
+    const options = await withEnhancedFlagsHandled(this, () => this.parse(Hello));
 
     const {args, flags} = options
 
