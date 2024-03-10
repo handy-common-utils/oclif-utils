@@ -131,226 +131,148 @@ Below are example scripts in `package.json`:
 
 ## Module: oclif-utils
 
-### Classes
-
-- [OclifUtils](#classesoclif_utilsoclifutilsmd)
-
-### Type aliases
+### Type Aliases
 
 #### CommandOptions
 
-Ƭ **CommandOptions**<`T`\>: `Interfaces.ParserOutput`<`CommandFlags`<`T`\>, `CommandArgs`<`T`\>\>
+Ƭ **CommandOptions**\<`C`\>: `C` extends `Input`\<infer \_F, infer \_B, infer \_A\> ? `Awaited`\<`ParsedOutput`\<`FBA`\<`C`\>\>\> : `never`
+
+Typical usage: `CommandOptions<typeof YourCommand>`
 
 ##### Type parameters
 
+| Name |
+| :------ |
+| `C` |
+
+### Variables
+
+#### enhancedFlags
+
+• `Const` **enhancedFlags**: `Object`
+
+Flags of '--help'/'-h' and '--update-readme.md'
+
+##### Type declaration
+
 | Name | Type |
 | :------ | :------ |
-| `T` | extends `Object` |
+| `help` | `BooleanFlag`\<`boolean`\> |
+| `update-readme.md` | `BooleanFlag`\<`boolean`\> |
 
 ### Functions
 
 #### generateHelpText
 
-▸ **generateHelpText**(`commandInstance`, `options?`): `Promise`<`string`\>
+▸ **generateHelpText**\<`T`\>(`commandInstance`, `options?`): `Promise`\<`string`\>
 
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `commandInstance` | `default` |
-| `options?` | `HelpOptions` |
-
-##### Returns
-
-`Promise`<`string`\>
-
-___
-
-#### getCommandConfig
-
-▸ **getCommandConfig**(`commandInstance`): `Promise`<`Command`\>
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `commandInstance` | `default` |
-
-##### Returns
-
-`Promise`<`Command`\>
-
-___
-
-#### injectHelpTextIntoReadmeMd
-
-▸ **injectHelpTextIntoReadmeMd**(`commandInstance`, `options?`): `Promise`<`void`\>
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `commandInstance` | `default` |
-| `options?` | `HelpOptions` |
-
-##### Returns
-
-`Promise`<`void`\>
-
-___
-
-#### prependCliToExamples
-
-▸ **prependCliToExamples**(`commandInstance`): `void`
-
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `commandInstance` | `default` |
-
-##### Returns
-
-`void`
-
-___
-
-#### reconstructCommandLine
-
-▸ **reconstructCommandLine**<`T`\>(`commandInstance`, `options`): `string`
+Generate formatted text content of help to a command
 
 ##### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends `Object` |
+| `T` | extends `Command` |
 
 ##### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `commandInstance` | `InstanceType`<`T`\> |
-| `options` | [`CommandOptions`](#commandoptions)<`T`\> |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `commandInstance` | `T` | instance of the Command |
+| `options?` | `Partial`\<`HelpOptions`\> | (optional) format options |
 
 ##### Returns
 
-`string`
-
-## Classes
-
-
-<a name="classesoclif_utilsoclifutilsmd"></a>
-
-### Class: OclifUtils
-
-[oclif-utils](#readmemd).OclifUtils
-
-#### Constructors
-
-##### constructor
-
-• **new OclifUtils**()
-
-#### Methods
-
-##### generateHelpText
-
-▸ `Static` **generateHelpText**(`commandInstance`, `options?`): `Promise`<`string`\>
-
-Generate formatted text content of help to a command
-
-###### Parameters
-
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `commandInstance` | `default` | instance of the Command |
-| `options?` | `HelpOptions` | format options |
-
-###### Returns
-
-`Promise`<`string`\>
+`Promise`\<`string`\>
 
 help content
 
 ___
 
-##### getCommandConfig
+#### injectHelpTextIntoReadmeMd
 
-▸ `Static` **getCommandConfig**(`commandInstance`): `Promise`<`Command`\>
+▸ **injectHelpTextIntoReadmeMd**\<`T`\>(`commandInstance`, `options?`): `Promise`\<`void`\>
 
-###### Parameters
+Replace the help text in the `README.md` file.
+Help text is marked by `<!-- help start -->` and `<!-- help end -->`.
 
-| Name | Type |
-| :------ | :------ |
-| `commandInstance` | `default` |
-
-###### Returns
-
-`Promise`<`Command`\>
-
-___
-
-##### injectHelpTextIntoReadmeMd
-
-▸ `Static` **injectHelpTextIntoReadmeMd**(`commandInstance`, `options?`): `Promise`<`void`\>
-
-###### Parameters
+##### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `commandInstance` | `default` |
-| `options?` | `HelpOptions` |
+| `T` | extends `Command` |
 
-###### Returns
-
-`Promise`<`void`\>
-
-___
-
-##### prependCliToExamples
-
-▸ `Static` **prependCliToExamples**(`commandInstance`): `void`
-
-Use this function to prepend command line to examples,
-so that we don't have to hard code command name in the examples.
-This function needs to be called from `init()` function of the Command.
-
-###### Parameters
+##### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `commandInstance` | `default` | instance of the Command |
+| `commandInstance` | `T` | instance of the Command |
+| `options?` | `Partial`\<`HelpOptions`\> | (optional) format options |
 
-###### Returns
+##### Returns
 
-`void`
+`Promise`\<`void`\>
 
 void
 
 ___
 
-##### reconstructCommandLine
+#### reconstructCommandLine
 
-▸ `Static` **reconstructCommandLine**<`T`\>(`commandInstance`, `options`): `string`
+▸ **reconstructCommandLine**\<`T`\>(`commandInstance`, `options`): `string`
 
 Reconstruct the command line from already parsed options.
 
-###### Type parameters
+##### Type parameters
 
 | Name | Type |
 | :------ | :------ |
-| `T` | extends `Object` |
+| `T` | extends (...`args`: `any`) => `any` |
 
-###### Parameters
+##### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `commandInstance` | `InstanceType`<`T`\> | When calling from the subclass of `Command`, just pass `this` |
-| `options` | [`CommandOptions`](#commandoptions)<`T`\> | Already parsed options. It can be got with `const options = await OclifUtils.parseCommandLine(commandInstance);` |
+| `commandInstance` | `InstanceType`\<`T`\> | When calling from the subclass of `Command`, just pass `this` |
+| `options` | `ParserOutput`\<`FlagOutput`, `FlagOutput`, `ArgOutput`\> | Already parsed options. When calling from the subclass of `Command`, it is the return value of `this.parse(...)`. |
 
-###### Returns
+##### Returns
 
 `string`
 
 the command line string corresponding to the parsed options
+
+___
+
+#### withEnhancedFlagsHandled
+
+▸ **withEnhancedFlagsHandled**\<`T`, `O`\>(`commandInstance`, `parse`, `helpOptions?`, `additionalHandler?`): `Promise`\<`O`\>
+
+Parse command line arguments, with enhanced flags handled
+
+##### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `T` | extends (...`args`: `any`) => `any` |
+| `O` | `O` |
+
+##### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `commandInstance` | `InstanceType`\<`T`\> | Instance of the command class, usually 'this' |
+| `parse` | () => `Promise`\<`O`\> | The function to call 'this.parse(<The class>)` |
+| `helpOptions?` | `Partial`\<`HelpOptions`\> | Optional options to customise the formatting of help text |
+| `additionalHandler?` | (`commandInstance`: `InstanceType`\<`T`\>, `cliOptions`: `undefined` \| `O`) => `Promise`\<`void`\> | Optional additional handler |
+
+##### Returns
+
+`Promise`\<`O`\>
+
+Output from 'this.parse(<The class>)'.
+
+**`Throws`**
+
+Error if the command line arguments are considered invalid by 'this.parse(<The class>)'.
 <!-- API end -->
