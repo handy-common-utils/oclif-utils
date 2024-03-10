@@ -50,6 +50,10 @@ describe('OclifUtils used in test projects', () => {
           expect(outcome.stdout).to.contain('USAGE');
           expect(outcome.stdout).to.contain('ARGUMENTS');
           expect(outcome.stdout).to.contain('FLAGS');
+          expect(outcome.stdout).to.contain('-f,');
+          expect(outcome.stdout).to.contain('-g,');
+          expect(outcome.stdout).to.contain('-h,');
+          expect(outcome.stdout).to.not.contain('update-readme.md');
           expect(outcome.stdout).to.contain('DESCRIPTION');
           expect(outcome.stdout).to.contain('EXAMPLES');
         });
@@ -73,6 +77,10 @@ describe('OclifUtils used in test projects', () => {
         expect(readmeFileContent).to.contain('USAGE');
         expect(readmeFileContent).to.contain('ARGUMENTS');
         expect(readmeFileContent).to.contain('FLAGS');
+        expect(readmeFileContent).to.contain('-f,');
+        expect(readmeFileContent).to.contain('-g,');
+        expect(readmeFileContent).to.contain('-h,');
+        expect(readmeFileContent).to.not.contain('update-readme.md');
         expect(readmeFileContent).to.contain('DESCRIPTION');
         expect(readmeFileContent).to.contain('EXAMPLES');
       });

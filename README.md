@@ -13,7 +13,7 @@ With this utility library, you will be able to:
 
 - Print out pretty full help/usage information
 - Reconstruct the full command line as a string
-- Insert full usage information into `README.md` file automatically
+- Insert help/usage information into `README.md` file automatically
 
 ## Installation
 
@@ -33,41 +33,44 @@ Or if you are using really old versions of oclif components (that means you are 
 
 ### Print out full help/usage information
 
-The function `withHelpHandled(...)` checks whether '-h' or '--help' is the only command line argument.
+The function `withEnhancedFlagsHandled(...)` checks whether '-h' or '--help' is the only command line argument.
 If that is the case, it will build the help information, print it out, then exit with exit code 0.
 In such case, your command processing code after it won't get executed.
 
 To use it, just need to add this as the first line in the `run()` function of your command class:
 
 ```javascript
-const options = await withHelpHandled(this, () => this.parse(<Your command class name>));
+const options = await withEnhancedFlagsHandled(this, () => this.parse(<Your command class name>));
 ```
 
 And, the `--help`/`-h` flag needs to be defined, like this:
 
 ```javascript
-help: Flags.boolean({char: 'h'}),
+static flags = {
+  ...enhancedFlags,
+  // your other flags
+};
 ```
 
 Below is a full example:
 
 ```typescript
 import { Command, Flags } from '@oclif/core'
-import { withHelpHandled } from '@handy-common-utils/oclif-utils';
+import { enhancedFlags, withEnhancedFlagsHandled } from '@handy-common-utils/oclif-utils';
 
 class Hello extends Command {
   // Feel free to define description, examples, etc.
   // They will be printed out as part of the help/usage information.
 
   static flags = {
-    help: Flags.boolean({char: 'h'}),
+    ...enhancedFlags,
     // and other flags ...
   }
 
   // and args ...
 
   async run(): Promise<void> {
-    const options = await withHelpHandled(this, () => this.parse(Hello));
+    const options = await withEnhancedFlagsHandled(this, () => this.parse(Hello));
 
     // your command processing code ...
   }
@@ -83,13 +86,13 @@ Below is an example:
 
 ```javascript
 import { Command, Flags } from '@oclif/core'
-import { reconstructCommandLine, withHelpHandled } from '@handy-common-utils/oclif-utils';
+import { reconstructCommandLine, withEnhancedFlagsHandled } from '@handy-common-utils/oclif-utils';
 
 class Hello extends Command {
   // other code ...
 
   async run(): Promise<void> {
-    const options = await withHelpHandled(this, () => this.parse(Hello));
+    const options = await withEnhancedFlagsHandled(this, () => this.parse(Hello));
     const fullCommandLine = reconstructCommandLine(this, options);
 
     // your command processing code ...
@@ -97,8 +100,28 @@ class Hello extends Command {
 }
 ```
 
-### Insert full usage information into `README.md`
+### Insert help/usage information into `README.md`
 
+In many occasions it would be handy if help/usage information can be inserted into `README.md` automatically.
+This can be achieved in two steps.
+
+__Step 1: Add `--update-readme.md` support in your command__
+
+As long as `enhancedFlags` and `withEnhancedFlagsHandled(...)` are used, then `--update-readme.md` is supported automatically.
+See the examples above for details.
+
+__Step 2: Run `./bin/run --update-readme.md` as part of your workflow__
+
+In your CI/CD workflow, you can just run your command with `--update-readme.md`, then the command will update `README.md` automatically.
+You may want to commit the change to `README.md` after it is updated.
+
+Below are example scripts in `package.json`:
+
+```json
+  "scripts": {
+    "preversion": "./bin/run --update-readme.md && git add README.md"
+  },
+```
 
 
 # API
