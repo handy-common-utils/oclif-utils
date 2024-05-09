@@ -163,7 +163,7 @@ Typical usage: `CommandOptions<typeof YourCommand>`
 
 • `Const` **enhancedFlags**: `Object`
 
-Flags of '--help'/'-h' and '--update-readme.md'
+Flags of '--help'/'-h' and '--version'/'-v' and --update-readme.md'
 
 ##### Type declaration
 
@@ -171,6 +171,7 @@ Flags of '--help'/'-h' and '--update-readme.md'
 | :------ | :------ |
 | `help` | `BooleanFlag`\<`boolean`\> |
 | `update-readme.md` | `BooleanFlag`\<`boolean`\> |
+| `version` | `BooleanFlag`\<`boolean`\> |
 
 ### Functions
 
