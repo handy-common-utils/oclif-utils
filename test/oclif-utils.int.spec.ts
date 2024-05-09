@@ -48,7 +48,7 @@ describe('OclifUtils used in test projects', () => {
           const outcome = await runWithinPrj(`./bin/run ${arg}`);
           expect(outcome.exitCode).to.equal(0);
           expect(outcome.stdout).to.contain('USAGE');
-          expect(outcome.stdout).to.contain('$ simple-cli-prj PERSON');
+          expect(outcome.stdout).to.contain('$ simple-cli-prj   PERSON');
           expect(outcome.stdout).to.contain('ARGUMENTS');
           expect(outcome.stdout).to.contain('FLAGS');
           expect(outcome.stdout).to.contain('-f,');

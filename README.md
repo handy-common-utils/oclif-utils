@@ -59,7 +59,7 @@ import { Command, Flags } from '@oclif/core'
 import { enhancedFlags, withEnhancedFlagsHandled } from '@handy-common-utils/oclif-utils';
 
 class Hello extends Command {
-  static id = '.' // If you are build a single-command CLI, this can avoid the command name to duplicate in the USAGE section of the help output.
+  static id = ' '; // workaround for the correct USAGE section in help output in case you are building a single command CLI
 
   // Feel free to define description, examples, etc.
   // They will be printed out as part of the help/usage information.

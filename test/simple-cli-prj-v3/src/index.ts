@@ -2,7 +2,7 @@ import {Args, Command, Flags} from '@oclif/core'
 import { enhancedFlags, reconstructCommandLine, withEnhancedFlagsHandled } from '../../../src'
 
 class Hello extends Command {
-  static id = '.' // single command
+  static id = ' '; // workaround for the correct USAGE section in help output
   static description = 'Say hello'
 
   static examples = [
