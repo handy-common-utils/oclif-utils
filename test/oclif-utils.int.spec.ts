@@ -48,6 +48,7 @@ describe('OclifUtils used in test projects', () => {
           const outcome = await runWithinPrj(`./bin/run ${arg}`);
           expect(outcome.exitCode).to.equal(0);
           expect(outcome.stdout).to.contain('USAGE');
+          expect(outcome.stdout).to.contain('$ simple-cli-prj PERSON');
           expect(outcome.stdout).to.contain('ARGUMENTS');
           expect(outcome.stdout).to.contain('FLAGS');
           expect(outcome.stdout).to.contain('-f,');
@@ -56,6 +57,7 @@ describe('OclifUtils used in test projects', () => {
           expect(outcome.stdout).to.not.contain('update-readme.md');
           expect(outcome.stdout).to.contain('DESCRIPTION');
           expect(outcome.stdout).to.contain('EXAMPLES');
+          expect(outcome.stdout).to.contain('$ simple-cli-prj hello friend --from oclif');
         });
       }
   
@@ -64,6 +66,14 @@ describe('OclifUtils used in test projects', () => {
         expect(outcome.exitCode).to.equal(2);
         expect(outcome.stderr).to.contain('Missing required flag');
       });
+
+      for (const arg of ['-v', '--version']) {
+        it(`prints version info when there is only ${arg}`, async () => {
+          const outcome = await runWithinPrj(`./bin/run ${arg}`);
+          expect(outcome.exitCode).to.equal(0);
+          expect(outcome.stdout).to.contain('simple-cli-prj/3.0.1');
+        });
+      }
 
       it('updates README.md when there is only --update-readme.md', async () => {
         const readmeFile = `test/simple-cli-prj-v${v}/README.md`;

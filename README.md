@@ -59,6 +59,8 @@ import { Command, Flags } from '@oclif/core'
 import { enhancedFlags, withEnhancedFlagsHandled } from '@handy-common-utils/oclif-utils';
 
 class Hello extends Command {
+  static id = '.' // If you are build a single-command CLI, this can avoid the command name to duplicate in the USAGE section of the help output.
+
   // Feel free to define description, examples, etc.
   // They will be printed out as part of the help/usage information.
 
@@ -76,6 +78,16 @@ class Hello extends Command {
   }
 }
 ```
+
+### Print out version information
+
+The function `withEnhancedFlagsHandled(...)` checks whether '-h' or '--help' or '-v' or '--version' is the only command line argument.
+If that is the case, it will build the help or version information, print it out, then exit with exit code 0.
+In such case, your command processing code after it won't get executed.
+
+The example in previous section handles '-v' and '--version' too.
+
+Don't use the `Flags.version(...)` provided by oclif, it is buggy.
 
 ### Reconstruct the full command line as a string
 

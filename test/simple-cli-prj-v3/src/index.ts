@@ -2,10 +2,11 @@ import {Args, Command, Flags} from '@oclif/core'
 import { enhancedFlags, reconstructCommandLine, withEnhancedFlagsHandled } from '../../../src'
 
 class Hello extends Command {
+  static id = '.' // single command
   static description = 'Say hello'
 
   static examples = [
-    `$ oex hello friend --from oclif
+    `$ <%= config.bin %> hello friend --from oclif
 hello friend from oclif! (./src/commands/hello/index.ts)
 `,
   ]
