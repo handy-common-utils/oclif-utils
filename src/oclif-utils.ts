@@ -39,10 +39,11 @@ export function generateHelpText<T extends Command>(commandInstance: T, options?
 }
 
 /**
- * Flags of '--help'/'-h' and '--update-readme.md'
+ * Flags of '--help'/'-h' and '--version'/'-v' and --update-readme.md'
  */
 export const enhancedFlags = {
   help: Flags.boolean({ required: false, char: 'h', description: 'Show help' }),
+  version: Flags.boolean({ required: false, char: 'v', description: 'Show CLI version' }),
   'update-readme.md': Flags.boolean({ hidden: true, required: false, description: 'For developers only, don\'t use' }),
 };
 
@@ -75,6 +76,12 @@ export async function withEnhancedFlagsHandled<T extends { argv: string[]; log: 
     case '-h': {
       const helpText = await generateHelpText(commandInstance, helpOptions);
       commandInstance.log(helpText);
+      commandInstance.exit(0);
+      break;
+    }
+    case '--version':
+    case '-v': {
+      commandInstance.log(commandInstance.config.userAgent);
       commandInstance.exit(0);
       break;
     }

@@ -33,8 +33,8 @@ Or if you are using really old versions of oclif components (that means you are 
 
 ### Print out full help/usage information
 
-The function `withEnhancedFlagsHandled(...)` checks whether '-h' or '--help' is the only command line argument.
-If that is the case, it will build the help information, print it out, then exit with exit code 0.
+The function `withEnhancedFlagsHandled(...)` checks whether '-h' or '--help' or '-v' or '--version' is the only command line argument.
+If that is the case, it will build the help or version information, print it out, then exit with exit code 0.
 In such case, your command processing code after it won't get executed.
 
 To use it, just need to add this as the first line in the `run()` function of your command class:
