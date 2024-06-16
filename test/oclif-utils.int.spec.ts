@@ -40,7 +40,7 @@ describe('OclifUtils used in test projects', () => {
       it('handles happy case with --gen', async () => {
         const outcome = await runWithinPrj('./bin/run me --from myself --gen');
         expect(outcome.exitCode).to.equal(0);
-        expect(outcome.stdout).to.contain('simple-cli-prj me --from myself --gen');
+        expect(outcome.stdout).to.contain('simple-cli-prj me --gen --from myself');
       });
   
       for (const arg of ['-h', '--help']) {
