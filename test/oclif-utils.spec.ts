@@ -2,7 +2,7 @@
 import { Args, Command, Flags } from '@oclif/core';
 import { expect } from 'chai';
 
-import { CommandOptions, generateHelpText, reconstructCommandLine } from '../src';
+import { CommandOptions, generateHelpText, reconstructCommandLine, withEnhancedFlagsHandled } from '../src';
 
 class TestCommand extends Command {
   static Options: CommandOptions<typeof TestCommand>;
@@ -61,7 +61,7 @@ It generates website files locally and can optionally launch a local server for 
   }
 
   async run() {
-    const options = await this.parse(TestCommand);
+    const options = await withEnhancedFlagsHandled(this, () => this.parse(TestCommand));
     testResultOptions = options;
 
     if (testResultExitCode !== undefined) {
@@ -178,7 +178,7 @@ describe('OclifUtils', () => {
     await TestCommand.run([
       '--help',
     ]);
-    console.log(testResultLastLog);
+
     expect(testResultExitCode).to.equal(0);
     expect(testResultLastLog).to.include('USAGE');
     expect(testResultLastLog).to.include('ARGUMENTS');

@@ -10,7 +10,7 @@ function runWithinDir(dir: string): (cmd: string) => Promise<ProcessOutput> {
 }
 
 describe('OclifUtils used in test projects', () => {
-  for (const v of ['2', '3']) {
+  for (const v of ['2', '3', '4']) {
     describe(`simple-cli-prj-v${v}`, () => {
       const runWithinPrj = runWithinDir(`test/simple-cli-prj-v${v}`);
   

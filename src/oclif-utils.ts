@@ -11,7 +11,8 @@ class HelpHelper extends Help {
   }
 
   async generateHelpText() {
-    const helpText = this.formatCommand(this.commandInstance.constructor as any);
+    const cmd = this.commandInstance.constructor as any;
+    const helpText = this.formatCommand(cmd.id == null ? { ...cmd, id: ' ' } : cmd);
     return helpText;
   }
 }

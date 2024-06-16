@@ -18,6 +18,9 @@
     "@handy-common-utils/fs-utils": ">=1.1.1",
     "@handy-common-utils/promise-utils": ">=1.5.0"
   },
+  "peerDependencies": {
+    "@oclif/core": ">=2 <=4"
+  },
   "devDependencies": {
     "@handy-common-utils/dev-dependencies-mocha": "^1.5.4",
     "@oclif/test": "^4.0.4",
@@ -42,9 +45,6 @@
   ],
   "author": "James Hu",
   "license": "Apache-2.0",
-  "peerDependencies": {
-    "@oclif/core": "^4.0.6"
-  },
   "volta": {
     "node": "18.16.0",
     "npm": "9.5.1"
