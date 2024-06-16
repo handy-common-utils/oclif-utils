@@ -19,7 +19,7 @@
     "@handy-common-utils/promise-utils": ">=1.5.0"
   },
   "peerDependencies": {
-    "@oclif/core": ">=2 <=4"
+    "@oclif/core": ">=2 <5"
   },
   "devDependencies": {
     "@handy-common-utils/dev-dependencies-mocha": "^1.5.4",
