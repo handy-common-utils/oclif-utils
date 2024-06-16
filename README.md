@@ -18,8 +18,8 @@ With this utility library, you will be able to:
 ## Installation
 
 This library has been verified to be working with
-[@oclif/core](https://github.com/oclif/core) v2 and v3, 
-you just need to add it as a dependency:
+[@oclif/core](https://github.com/oclif/core) v2, v3, and v4. 
+You just need to add it as a dependency:
 
 ```sh
 npm install @handy-common-utils/oclif-utils@latest
