@@ -8,4 +8,6 @@ const oclif = require('@oclif/core')
 oclif.settings.debug = true;
 
 require('../src').run()
-.then(require('@oclif/core/flush')).catch(require('@oclif/core/handle'))
+.catch(oclif.Errors.handle)
+.finally(oclif.flush);
+

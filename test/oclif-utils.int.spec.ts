@@ -10,7 +10,7 @@ function runWithinDir(dir: string): (cmd: string) => Promise<ProcessOutput> {
 }
 
 describe('OclifUtils used in test projects', () => {
-  for (const v of ['2', '3']) {
+  for (const v of ['2', '3', '4']) {
     describe(`simple-cli-prj-v${v}`, () => {
       const runWithinPrj = runWithinDir(`test/simple-cli-prj-v${v}`);
   
@@ -40,7 +40,7 @@ describe('OclifUtils used in test projects', () => {
       it('handles happy case with --gen', async () => {
         const outcome = await runWithinPrj('./bin/run me --from myself --gen');
         expect(outcome.exitCode).to.equal(0);
-        expect(outcome.stdout).to.contain('simple-cli-prj me --from myself --gen');
+        expect(outcome.stdout).to.contain('simple-cli-prj me --gen --from myself');
       });
   
       for (const arg of ['-h', '--help']) {
