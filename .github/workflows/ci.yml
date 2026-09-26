@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [master, develop, feature/**, chore/**, bugfix/**, hotfix/**]
+    branches: [master, develop, feat/**, fix/**, release/**, feature/**, chore/**, bugfix/**, hotfix/**]
 
 jobs:
   build-and-test:
