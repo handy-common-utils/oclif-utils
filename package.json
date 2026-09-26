@@ -19,12 +19,12 @@
     "@handy-common-utils/promise-utils": ">=1.5.0"
   },
   "peerDependencies": {
-    "@oclif/core": ">=2 <5"
+    "@oclif/core": ">=2 <7"
   },
   "devDependencies": {
     "@handy-common-utils/dev-dependencies-mocha": "^1.5.4",
-    "@oclif/test": "^4.0.4",
-    "oclif": "^4.13.7",
+    "@oclif/test": "^5.0.1",
+    "oclif": "^6.0.2",
     "zx": "^4.3.0"
   },
   "publishConfig": {

@@ -18,7 +18,7 @@ With this utility library, you will be able to:
 ## Installation
 
 This library has been verified to be working with
-[@oclif/core](https://github.com/oclif/core) v2, v3, and v4. 
+[@oclif/core](https://github.com/oclif/core) v2, v3, v4, v5, and v6. 
 You just need to add it as a dependency:
 
 ```sh

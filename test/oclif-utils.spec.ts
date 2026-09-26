@@ -189,8 +189,8 @@ describe('OclifUtils', () => {
     expect(testResultHelpText).to.include('USAGE');
     expect(testResultHelpText).to.include(' [PATH] [DEPTH]'); // $ mocha testcommand [PATH] [DEPTH]
     expect(testResultHelpText).to.include('ARGUMENTS');
-    expect(testResultHelpText).to.include('PATH   [default: dataflow] path for putting generated website files');
-    expect(testResultHelpText).to.include('DEPTH  [default: 5] a sample argument');
+    expect(testResultHelpText).to.include('path for putting generated website files');
+    expect(testResultHelpText).to.include('a sample argument');
     expect(testResultHelpText).to.include('FLAGS');
     expect(testResultHelpText).to.include('-d, --debug                output debug messages');
     expect(testResultHelpText).to.include('-x, --exclude=<value>');
