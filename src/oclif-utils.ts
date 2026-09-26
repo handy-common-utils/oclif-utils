@@ -1,6 +1,5 @@
 import { replaceInFile } from '@handy-common-utils/fs-utils';
 import { Command, Flags, Help, Interfaces } from '@oclif/core';
-import { Input, OutputFlags, ParserOutput } from '@oclif/core/lib/interfaces/parser';
 
 /**
  * Helper class to utilise protected method formatCommand(...) in the parent class
@@ -28,7 +27,7 @@ const quoteIfNeeded = (text: any) => {
  * Generate formatted text content of help to a command
  * @param commandInstance instance of the Command
  * @param options (optional) format options
- * @return help content
+ * @returns help content
  */
 export function generateHelpText<T extends Command>(commandInstance: T, options?: Partial<Interfaces.HelpOptions>): Promise<string> {
   const helper = new HelpHelper(commandInstance, {
@@ -40,9 +39,15 @@ export function generateHelpText<T extends Command>(commandInstance: T, options?
 }
 
 /**
- * Flags of '--help'/'-h' and '--version'/'-v' and --update-readme.md'
+ * Flags of '--help'/'-h' and '--version'/'-v' and --update-readme.md'.
+ * Using `any' in the type is a pragmatic fix for a cross-oclif-version type incompatibility that shows up as:
+ * `Type '"all" | "some" | "none" | "only"' is not assignable to type '"all" | "some" | "none"'`
  */
-export const enhancedFlags = {
+export const enhancedFlags: {
+  help: any;
+  version: any;
+  'update-readme.md': any;
+} = {
   help: Flags.boolean({ required: false, char: 'h', description: 'Show help' }),
   version: Flags.boolean({ required: false, char: 'v', description: 'Show CLI version' }),
   'update-readme.md': Flags.boolean({ hidden: true, required: false, description: 'For developers only, don\'t use' }),
@@ -55,9 +60,9 @@ export const enhancedFlags = {
  * @param helpOptions Optional options to customise the formatting of help text
  * @param additionalHandler Optional additional handler
  * @returns Output from 'this.parse(<The class>)'.
- * @throws Error if the command line arguments are considered invalid by 'this.parse(<The class>)'.
+ * @throws {Error} if the command line arguments are considered invalid by 'this.parse(<The class>)'.
  */
-export async function withEnhancedFlagsHandled<T extends { argv: string[]; log: Command['log']; exit: Command['exit']; new(...args: any): any}, O>(
+export async function withEnhancedFlagsHandled<T extends { argv: string[]; log: Command['log']; exit: Command['exit']; new(...args: any): any }, O>(
   commandInstance: InstanceType<T>,
   parse: () => Promise<O>,
   helpOptions?: Partial<Interfaces.HelpOptions>,
@@ -72,7 +77,7 @@ export async function withEnhancedFlagsHandled<T extends { argv: string[]; log: 
   }
 
   const onlyArg = commandInstance.argv?.length === 1 ? commandInstance.argv[0] : undefined;
-  switch(onlyArg) {
+  switch (onlyArg) {
     case '--help':
     case '-h': {
       const helpText = await generateHelpText(commandInstance, helpOptions);
@@ -127,7 +132,7 @@ export async function injectHelpTextIntoReadmeMd<T extends Command>(commandInsta
  * @param options Already parsed options. When calling from the subclass of `Command`, it is the return value of `this.parse(...)`.
  * @returns the command line string corresponding to the parsed options
  */
-export function reconstructCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any}>(commandInstance: InstanceType<T>, options: Awaited<ReturnType<Command['parse']>>): string {
+export function reconstructCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any }>(commandInstance: InstanceType<T>, options: Awaited<ReturnType<Command['parse']>>): string {
   const args = new Array<string>();
   args.push(commandInstance.config.bin);
   if (options.argv?.length > 0) {
@@ -153,10 +158,9 @@ export function reconstructCommandLine<T extends { args: Array<{ name: string }>
   return args.join(' ');
 }
 
-type FBA<C> = C extends Input<infer F, infer B, infer A> ? [F, B, A] : never;
-type ParsedOutput<FBA> = FBA extends [infer F extends OutputFlags<any>, infer B extends OutputFlags<any>, infer A extends OutputFlags<any>] ? ParserOutput<F, B, A> : never;
+type FBA<C> = C extends Interfaces.Input<infer F, infer B, infer A> ? [F, B, A] : never;
+type ParsedOutput<FBA> = FBA extends [infer F extends Interfaces.OutputFlags<any>, infer B extends Interfaces.OutputFlags<any>, infer A extends Interfaces.OutputFlags<any>] ? Interfaces.ParserOutput<F, B, A> : never;
 /**
  * Typical usage: `CommandOptions<typeof YourCommand>`
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type CommandOptions<C> = C extends Input<infer _F extends OutputFlags<any>, infer _B extends OutputFlags<any>, infer _A extends OutputFlags<any>> ? Awaited<ParsedOutput<FBA<C>>> : never;
+export type CommandOptions<C> = C extends Interfaces.Input<infer _F extends Interfaces.OutputFlags<any>, infer _B extends Interfaces.OutputFlags<any>, infer _A extends Interfaces.OutputFlags<any>> ? Awaited<ParsedOutput<FBA<C>>> : never;

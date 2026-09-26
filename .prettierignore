@@ -1,18 +1,1 @@
-.yarn/
-**/.yarn/
-node_modules/
-**/node_modules/
-
-.serverless/
-**/.serverless/
-
-dist/
-**/dist/
-
-coverage/
-**/coverage/
-reports/
-**/reports/
-
-api-docs/
-**/api-docs/
+.yarn/ **/.yarn/ node_modules/ **/node_modules/ dist/ **/dist/ coverage/ **/coverage/ reports/ **/reports/ api-docs/ **/api-docs/ package-lock.json test/simple-cli-prj*/

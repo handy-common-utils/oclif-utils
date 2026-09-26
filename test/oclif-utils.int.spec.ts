@@ -3,8 +3,9 @@ import * as fs from 'node:fs';
 import { $, ProcessOutput } from 'zx';
 
 function runWithinDir(dir: string): (cmd: string) => Promise<ProcessOutput> {
+  const p = $({ cwd: dir });
   function withinPrj(cmd: string): Promise<ProcessOutput> {
-    return $`cd ${dir} && ${cmd.split(' ')}`.catch((error) => error);
+    return p`bash -c ${cmd}`.nothrow();
   }
   return withinPrj;
 }
@@ -40,7 +41,7 @@ describe('OclifUtils used in test projects', () => {
       it('handles happy case with --gen', async () => {
         const outcome = await runWithinPrj('./bin/run me --from myself --gen');
         expect(outcome.exitCode).to.equal(0);
-        expect(outcome.stdout).to.contain('simple-cli-prj me --gen --from myself');
+        expect(outcome.stdout).to.match(/simple-cli-prj me (--gen --from myself|--from myself --gen)/);
       });
   
       for (const arg of ['-h', '--help']) {

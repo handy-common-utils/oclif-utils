@@ -1,5 +1,5 @@
 {
-  "ecmaVersion": "es2018",
+  "ecmaVersion": "es2022",
   "module": false,
   "allowHashBang": true,
   "files": "./dist/**/*.js",

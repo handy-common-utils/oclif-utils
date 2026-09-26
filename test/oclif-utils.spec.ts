@@ -45,10 +45,10 @@ It generates website files locally and can optionally launch a local server for 
 
   static examples = [
     '^ -r ap-southeast-2 -s',
-    `^ -r ap-southeast-2 -s -i '*boi*' -i '*datahub*' \\
+    String.raw`^ -r ap-southeast-2 -s -i '*boi*' -i '*datahub*' \
       -x '*jameshu*' -c`,
-    `^ -r ap-southeast-2 -s -i '*lr-*' \\
-      -i '*lead*' -x '*slack*' -x '*lead-prioritization*' \\
+    String.raw`^ -r ap-southeast-2 -s -i '*lr-*' \
+      -i '*lead*' -x '*slack*' -x '*lead-prioritization*' \
       -x '*lead-scor*' -x '*LeadCapture*' -c`,
     {
       description: 'this command line shows how to run it',
