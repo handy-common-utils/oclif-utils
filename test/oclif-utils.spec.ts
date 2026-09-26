@@ -133,6 +133,8 @@ describe('OclifUtils', () => {
     await TestCommand.run([
       'api-doc',
       '9',
+      '-r',
+      'ap-southeast-2',
       '-l',
       '10',
       '-i',
@@ -143,7 +145,41 @@ describe('OclifUtils', () => {
       'abc and d',
       '--server',
     ]);
-    expect(testResultCommandLine).to.eq("mocha 9 api-doc --include '*xyz*' 'abc and d' --exclude x1 --server --port 8002 --parallelism 10");
+    expect(testResultCommandLine).to.eq("mocha 9 api-doc --region ap-southeast-2 --include '*xyz*' 'abc and d' --exclude x1 --server --port 8002 --parallelism 10");
+  });
+
+  it('should call additionalHandler when provided', async () => {
+    let handlerCalled = false;
+    let receivedCliOptions: any;
+    const dummyCmd = new TestCommand([], {} as any);
+    await withEnhancedFlagsHandled(
+      dummyCmd,
+      async () => ({ flags: { quiet: true }, args: {} }),
+      undefined,
+      async (_cmd, cliOptions) => {
+        handlerCalled = true;
+        receivedCliOptions = cliOptions;
+      },
+    );
+    expect(handlerCalled).to.be.true;
+    expect(receivedCliOptions).to.eql({ flags: { quiet: true }, args: {} });
+  });
+
+  it('should rethrow parsing error when parse fails and no help/version flag', async () => {
+    const dummyCmd = new TestCommand([], {} as any);
+    let caughtError: any;
+    try {
+      await withEnhancedFlagsHandled(
+        dummyCmd,
+        async () => {
+          throw new Error('Non-existent flag: --unknown-flag');
+        },
+      );
+    } catch (error) {
+      caughtError = error;
+    }
+    expect(caughtError).to.be.an.instanceOf(Error);
+    expect(caughtError.message).to.equal('Non-existent flag: --unknown-flag');
   });
 
   it('should generateHelpText', async () => {
