@@ -1,0 +1,17 @@
+{
+  "all": true,
+  "include": ["src/**"],
+  "exclude": [
+    "**/dist/**",
+    "**/lib/**",
+    "**/*.d.ts",
+    "**/node_modules/**",
+    "**/coverage/lcov-report/*.js"
+  ],
+  "clean": true,
+  "temp-directory": "coverage",
+  "report-dir": "coverage",
+  "skip-full": true,
+  "reporter": ["json", "html", "text"],
+  "check-coverage": false
+}

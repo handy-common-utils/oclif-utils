@@ -1,6 +1,6 @@
 import { replaceInFile } from '@handy-common-utils/fs-utils';
 import { Command, Flags, Help, Interfaces } from '@oclif/core';
-import { Input, OutputFlags, ParserOutput } from '@oclif/core/lib/interfaces/parser';
+import { Input, OutputFlags, ParserOutput } from '@oclif/core/parser';
 
 /**
  * Helper class to utilise protected method formatCommand(...) in the parent class
@@ -18,17 +18,14 @@ class HelpHelper extends Help {
 }
 
 const quoteIfNeeded = (text: any) => {
-  if (typeof text !== 'string' || /^[\d+,A-Za-z-]+$/.test(text)) {
-    return `${text}`;
-  }
-  return `'${text}'`;
+  return typeof text !== 'string' || /^[\d+,A-Za-z-]+$/.test(text) ? `${text}` : `'${text}'`;
 };
 
 /**
  * Generate formatted text content of help to a command
  * @param commandInstance instance of the Command
  * @param options (optional) format options
- * @return help content
+ * @returns help content
  */
 export function generateHelpText<T extends Command>(commandInstance: T, options?: Partial<Interfaces.HelpOptions>): Promise<string> {
   const helper = new HelpHelper(commandInstance, {
@@ -57,7 +54,7 @@ export const enhancedFlags = {
  * @returns Output from 'this.parse(<The class>)'.
  * @throws Error if the command line arguments are considered invalid by 'this.parse(<The class>)'.
  */
-export async function withEnhancedFlagsHandled<T extends { argv: string[]; log: Command['log']; exit: Command['exit']; new(...args: any): any}, O>(
+export async function withEnhancedFlagsHandled<T extends { argv: string[]; log: Command['log']; exit: Command['exit']; new(...args: any): any }, O>(
   commandInstance: InstanceType<T>,
   parse: () => Promise<O>,
   helpOptions?: Partial<Interfaces.HelpOptions>,
@@ -72,7 +69,7 @@ export async function withEnhancedFlagsHandled<T extends { argv: string[]; log: 
   }
 
   const onlyArg = commandInstance.argv?.length === 1 ? commandInstance.argv[0] : undefined;
-  switch(onlyArg) {
+  switch (onlyArg) {
     case '--help':
     case '-h': {
       const helpText = await generateHelpText(commandInstance, helpOptions);
@@ -99,9 +96,8 @@ export async function withEnhancedFlagsHandled<T extends { argv: string[]; log: 
 
   if (cliOptions) {
     return cliOptions;
-  } else {
-    throw parsingError;
   }
+  throw parsingError;
 }
 
 /**
@@ -127,25 +123,27 @@ export async function injectHelpTextIntoReadmeMd<T extends Command>(commandInsta
  * @param options Already parsed options. When calling from the subclass of `Command`, it is the return value of `this.parse(...)`.
  * @returns the command line string corresponding to the parsed options
  */
-export function reconstructCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any}>(commandInstance: InstanceType<T>, options: Awaited<ReturnType<Command['parse']>>): string {
+export function reconstructCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any }>(commandInstance: InstanceType<T>, options: Awaited<ReturnType<Command['parse']>>): string {
   const args = new Array<string>();
   args.push(commandInstance.config.bin);
   if (options.argv?.length > 0) {
     args.push(...options.argv.map((x: any) => quoteIfNeeded(x)));
   }
   if (options.flags) {
-    for (const flagName of Object.keys(options.flags)) {
-      const flagValue = options.flags[flagName];
-      if (flagValue !== false) {  // no need if the flag is not toggled on
-        args.push(`--${flagName}`);
-        if (typeof flagValue !== 'boolean') {
-          if (Array.isArray(flagValue)) {
-            for (const value of flagValue) {
-              args.push(`${quoteIfNeeded(value)}`);
-            }
-          } else {
-            args.push(`${quoteIfNeeded(flagValue)}`);
+    for (const [flagName, flagValue] of Object.entries(options.flags)) {
+      if (flagValue === false) {
+        continue;
+      }
+
+      // no need if the flag is not toggled on
+      args.push(`--${flagName}`);
+      if (typeof flagValue !== 'boolean') {
+        if (Array.isArray(flagValue)) {
+          for (const value of flagValue) {
+            args.push(`${quoteIfNeeded(value)}`);
           }
+        } else {
+          args.push(`${quoteIfNeeded(flagValue)}`);
         }
       }
     }
@@ -158,5 +156,5 @@ type ParsedOutput<FBA> = FBA extends [infer F extends OutputFlags<any>, infer B 
 /**
  * Typical usage: `CommandOptions<typeof YourCommand>`
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 export type CommandOptions<C> = C extends Input<infer _F extends OutputFlags<any>, infer _B extends OutputFlags<any>, infer _A extends OutputFlags<any>> ? Awaited<ParsedOutput<FBA<C>>> : never;

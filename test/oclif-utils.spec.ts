@@ -10,15 +10,17 @@ class TestCommand extends Command {
   static description = 'Visualisation of AWS serverless (Lambda, API Gateway, SNS, SQS, etc.) dataflow\n' +
     `This command line tool can visualise AWS serverless (Lambda, API Gateway, SNS, SQS, etc.) dataflow. 
 It generates website files locally and can optionally launch a local server for you to preview.`.replace(/\n/g, '') +
-`\n\nBefore running this tool, you need to log into your AWS account (through command line like aws, saml2aws, okta-aws, etc.) first. 
+    `\n\nBefore running this tool, you need to log into your AWS account (through command line like aws, saml2aws, okta-aws, etc.) first. 
 \nThis tool is free and open source: https://github.com/james-hu/aws-serverless-dataflow`;
 
   static flags = {
     version: Flags.version({ char: 'v' }),
-    help: { ...Flags.help({ char: 'h' }), parse: async (_: any, cmd: Command) => {
-      cmd.log(await generateHelpText(cmd));
-      cmd.exit(0);
-    } },
+    help: {
+      ...Flags.help({ char: 'h' }), parse: async (_: any, cmd: Command) => {
+        cmd.log(await generateHelpText(cmd));
+        cmd.exit(0);
+      },
+    },
     'update-readme.md': Flags.boolean({ hidden: true, description: 'For developers only, don\'t use' }),
 
     region: Flags.string({ char: 'r', description: 'AWS region (required if you don\'t have AWS_REGION environment variable configured)' }),
@@ -45,10 +47,10 @@ It generates website files locally and can optionally launch a local server for 
 
   static examples = [
     '^ -r ap-southeast-2 -s',
-    `^ -r ap-southeast-2 -s -i '*boi*' -i '*datahub*' \\
+    String.raw`^ -r ap-southeast-2 -s -i '*boi*' -i '*datahub*' \
       -x '*jameshu*' -c`,
-    `^ -r ap-southeast-2 -s -i '*lr-*' \\
-      -i '*lead*' -x '*slack*' -x '*lead-prioritization*' \\
+    String.raw`^ -r ap-southeast-2 -s -i '*lr-*' \
+      -i '*lead*' -x '*slack*' -x '*lead-prioritization*' \
       -x '*lead-scor*' -x '*LeadCapture*' -c`,
     {
       description: 'this command line shows how to run it',
@@ -145,7 +147,7 @@ describe('OclifUtils', () => {
       'abc and d',
       '--server',
     ]);
-    expect(testResultCommandLine).to.eq("mocha 9 api-doc --region ap-southeast-2 --include '*xyz*' 'abc and d' --exclude x1 --server --port 8002 --parallelism 10");
+    expect(testResultCommandLine).to.eq("oclif 9 api-doc --region ap-southeast-2 --include '*xyz*' 'abc and d' --exclude x1 --server --port 8002 --parallelism 10");
   });
 
   it('should call additionalHandler when provided', async () => {
@@ -186,11 +188,12 @@ describe('OclifUtils', () => {
     await TestCommand.run([
       '--generateHelpText',
     ]);
+    console.error(testResultHelpText);
     expect(testResultHelpText).to.include('USAGE');
     expect(testResultHelpText).to.include(' [PATH] [DEPTH]'); // $ mocha testcommand [PATH] [DEPTH]
     expect(testResultHelpText).to.include('ARGUMENTS');
-    expect(testResultHelpText).to.include('PATH   [default: dataflow] path for putting generated website files');
-    expect(testResultHelpText).to.include('DEPTH  [default: 5] a sample argument');
+    expect(testResultHelpText).to.include('[PATH]   [default: dataflow] path for putting generated website files');
+    expect(testResultHelpText).to.include('[DEPTH]  [default: 5] a sample argument');
     expect(testResultHelpText).to.include('FLAGS');
     expect(testResultHelpText).to.include('-d, --debug                output debug messages');
     expect(testResultHelpText).to.include('-x, --exclude=<value>');

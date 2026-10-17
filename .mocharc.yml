@@ -3,4 +3,5 @@ spec:
 timeout: 5000
 require:
   - source-map-support/register
-  - ts-node/register
+node-option:
+  - import=tsx
