@@ -140,56 +140,119 @@ Below are example scripts in `package.json`:
 <!-- API start -->
 <a name="readmemd"></a>
 
-## Module: oclif-utils
+## @handy-common-utils/oclif-utils
 
-### Type Aliases
+### Modules
 
-#### CommandOptions
+| Module | Description |
+| ------ | ------ |
+| [index](#indexreadmemd) | - |
+| [oclif-utils](#oclif-utilsreadmemd) | - |
 
-Ƭ **CommandOptions**\<`C`\>: `C` extends `Input`\<infer \_F, infer \_B, infer \_A\> ? `Awaited`\<`ParsedOutput`\<`FBA`\<`C`\>\>\> : `never`
+## Index
 
-Typical usage: `CommandOptions<typeof YourCommand>`
 
-##### Type parameters
+<a id="indexreadmemd"></a>
 
-| Name |
-| :------ |
-| `C` |
+### index
 
-### Variables
+#### References
 
-#### enhancedFlags
+<a id="api-commandoptions"></a>
 
-• `Const` **enhancedFlags**: `Object`
+##### CommandOptions
 
-Flags of '--help'/'-h' and '--version'/'-v' and --update-readme.md'
+Re-exports [CommandOptions](#oclif-utilstype-aliasescommandoptionsmd)
 
-##### Type declaration
+***
 
-| Name | Type |
-| :------ | :------ |
-| `help` | `BooleanFlag`\<`boolean`\> |
-| `update-readme.md` | `BooleanFlag`\<`boolean`\> |
-| `version` | `BooleanFlag`\<`boolean`\> |
+<a id="api-enhancedflags"></a>
+
+##### enhancedFlags
+
+Re-exports [enhancedFlags](#oclif-utilsvariablesenhancedflagsmd)
+
+***
+
+<a id="api-generatehelptext"></a>
+
+##### generateHelpText
+
+Re-exports [generateHelpText](#oclif-utilsfunctionsgeneratehelptextmd)
+
+***
+
+<a id="api-injecthelptextintoreadmemd"></a>
+
+##### injectHelpTextIntoReadmeMd
+
+Re-exports [injectHelpTextIntoReadmeMd](#oclif-utilsfunctionsinjecthelptextintoreadmemdmd)
+
+***
+
+<a id="api-reconstructcommandline"></a>
+
+##### reconstructCommandLine
+
+Re-exports [reconstructCommandLine](#oclif-utilsfunctionsreconstructcommandlinemd)
+
+***
+
+<a id="api-withenhancedflagshandled"></a>
+
+##### withEnhancedFlagsHandled
+
+Re-exports [withEnhancedFlagsHandled](#oclif-utilsfunctionswithenhancedflagshandledmd)
+
+## Oclif Utils
+
+
+<a id="oclif-utilsreadmemd"></a>
+
+### oclif-utils
+
+#### Type Aliases
+
+| Type Alias | Description |
+| ------ | ------ |
+| [CommandOptions](#oclif-utilstype-aliasescommandoptionsmd) | Typical usage: `CommandOptions<typeof YourCommand>` |
+
+#### Variables
+
+| Variable | Description |
+| ------ | ------ |
+| [enhancedFlags](#oclif-utilsvariablesenhancedflagsmd) | Flags of '--help'/'-h' and '--version'/'-v' and --update-readme.md' |
+
+#### Functions
+
+| Function | Description |
+| ------ | ------ |
+| [generateHelpText](#oclif-utilsfunctionsgeneratehelptextmd) | Generate formatted text content of help to a command |
+| [injectHelpTextIntoReadmeMd](#oclif-utilsfunctionsinjecthelptextintoreadmemdmd) | Replace the help text in the `README.md` file. Help text is marked by `<!-- help start -->` and `<!-- help end -->`. |
+| [reconstructCommandLine](#oclif-utilsfunctionsreconstructcommandlinemd) | Reconstruct the command line from already parsed options. |
+| [withEnhancedFlagsHandled](#oclif-utilsfunctionswithenhancedflagshandledmd) | Parse command line arguments, with enhanced flags handled |
 
 ### Functions
 
-#### generateHelpText
 
-▸ **generateHelpText**\<`T`\>(`commandInstance`, `options?`): `Promise`\<`string`\>
+<a id="oclif-utilsfunctionsgeneratehelptextmd"></a>
+
+#### Function: generateHelpText()
+
+> **generateHelpText**\<`T`\>(`commandInstance`, `options?`): `Promise`\<`string`\>
 
 Generate formatted text content of help to a command
 
-##### Type parameters
+##### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `Command` |
+| Type Parameter |
+| ------ |
+| <a id="api-type-parameter-t"></a> `T` *extends* `Command` |
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
 | `commandInstance` | `T` | instance of the Command |
 | `options?` | `Partial`\<`HelpOptions`\> | (optional) format options |
 
@@ -199,25 +262,26 @@ Generate formatted text content of help to a command
 
 help content
 
-___
 
-#### injectHelpTextIntoReadmeMd
+<a id="oclif-utilsfunctionsinjecthelptextintoreadmemdmd"></a>
 
-▸ **injectHelpTextIntoReadmeMd**\<`T`\>(`commandInstance`, `options?`): `Promise`\<`void`\>
+#### Function: injectHelpTextIntoReadmeMd()
+
+> **injectHelpTextIntoReadmeMd**\<`T`\>(`commandInstance`, `options?`): `Promise`\<`void`\>
 
 Replace the help text in the `README.md` file.
 Help text is marked by `<!-- help start -->` and `<!-- help end -->`.
 
-##### Type parameters
+##### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `Command` |
+| Type Parameter |
+| ------ |
+| <a id="api-type-parameter-t"></a> `T` *extends* `Command` |
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
 | `commandInstance` | `T` | instance of the Command |
 | `options?` | `Partial`\<`HelpOptions`\> | (optional) format options |
 
@@ -227,26 +291,27 @@ Help text is marked by `<!-- help start -->` and `<!-- help end -->`.
 
 void
 
-___
 
-#### reconstructCommandLine
+<a id="oclif-utilsfunctionsreconstructcommandlinemd"></a>
 
-▸ **reconstructCommandLine**\<`T`\>(`commandInstance`, `options`): `string`
+#### Function: reconstructCommandLine()
+
+> **reconstructCommandLine**\<`T`\>(`commandInstance`, `options`): `string`
 
 Reconstruct the command line from already parsed options.
 
-##### Type parameters
+##### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | extends (...`args`: `any`) => `any` |
+| Type Parameter |
+| ------ |
+| <a id="api-type-parameter-t"></a> `T` *extends* \{(...`args`): `any`; `args`: `object`[]; \} |
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
 | `commandInstance` | `InstanceType`\<`T`\> | When calling from the subclass of `Command`, just pass `this` |
-| `options` | `ParserOutput`\<`FlagOutput`, `FlagOutput`, `ArgOutput`\> | Already parsed options. When calling from the subclass of `Command`, it is the return value of `this.parse(...)`. |
+| `options` | `ParserOutput`\<`FlagOutput`\> | Already parsed options. When calling from the subclass of `Command`, it is the return value of `this.parse(...)`. |
 
 ##### Returns
 
@@ -254,29 +319,30 @@ Reconstruct the command line from already parsed options.
 
 the command line string corresponding to the parsed options
 
-___
 
-#### withEnhancedFlagsHandled
+<a id="oclif-utilsfunctionswithenhancedflagshandledmd"></a>
 
-▸ **withEnhancedFlagsHandled**\<`T`, `O`\>(`commandInstance`, `parse`, `helpOptions?`, `additionalHandler?`): `Promise`\<`O`\>
+#### Function: withEnhancedFlagsHandled()
+
+> **withEnhancedFlagsHandled**\<`T`, `O`\>(`commandInstance`, `parse`, `helpOptions?`, `additionalHandler?`): `Promise`\<`O`\>
 
 Parse command line arguments, with enhanced flags handled
 
-##### Type parameters
+##### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | extends (...`args`: `any`) => `any` |
-| `O` | `O` |
+| Type Parameter |
+| ------ |
+| <a id="api-type-parameter-t"></a> `T` *extends* \{(...`args`): `any`; `argv`: `string`[]; `exit`: (`code?`) => `never`; `log`: (`message?`, ...`args`) => `void`; \} |
+| <a id="api-type-parameter-o"></a> `O` |
 
 ##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
 | `commandInstance` | `InstanceType`\<`T`\> | Instance of the command class, usually 'this' |
 | `parse` | () => `Promise`\<`O`\> | The function to call 'this.parse(<The class>)` |
 | `helpOptions?` | `Partial`\<`HelpOptions`\> | Optional options to customise the formatting of help text |
-| `additionalHandler?` | (`commandInstance`: `InstanceType`\<`T`\>, `cliOptions`: `undefined` \| `O`) => `Promise`\<`void`\> | Optional additional handler |
+| `additionalHandler?` | (`commandInstance`, `cliOptions`) => `Promise`\<`void`\> | Optional additional handler |
 
 ##### Returns
 
@@ -284,7 +350,43 @@ Parse command line arguments, with enhanced flags handled
 
 Output from 'this.parse(<The class>)'.
 
-**`Throws`**
+##### Throws
 
 Error if the command line arguments are considered invalid by 'this.parse(<The class>)'.
+
+### Type Aliases
+
+
+<a id="oclif-utilstype-aliasescommandoptionsmd"></a>
+
+#### Type Alias: CommandOptions\<C\>
+
+> **CommandOptions**\<`C`\> = `C` *extends* `Input`\<infer \_F, infer \_B, infer \_A\> ? `Awaited`\<`ParsedOutput`\<`FBA`\<`C`\>\>\> : `never`
+
+Typical usage: `CommandOptions<typeof YourCommand>`
+
+##### Type Parameters
+
+| Type Parameter |
+| ------ |
+| <a id="api-type-parameter-c"></a> `C` |
+
+### Variables
+
+
+<a id="oclif-utilsvariablesenhancedflagsmd"></a>
+
+#### Variable: enhancedFlags
+
+> `const` **enhancedFlags**: `object`
+
+Flags of '--help'/'-h' and '--version'/'-v' and --update-readme.md'
+
+##### Type Declaration
+
+| Name | Type |
+| ------ | ------ |
+| <a id="api-property-help"></a> `help` | `BooleanFlag`\<`boolean`\> |
+| <a id="api-property-update-readmemd"></a> `update-readme.md` | `BooleanFlag`\<`boolean`\> |
+| <a id="api-property-version"></a> `version` | `BooleanFlag`\<`boolean`\> |
 <!-- API end -->
