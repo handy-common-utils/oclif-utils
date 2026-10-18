@@ -188,7 +188,6 @@ describe('OclifUtils', () => {
     await TestCommand.run([
       '--generateHelpText',
     ]);
-    console.error(testResultHelpText);
     expect(testResultHelpText).to.include('USAGE');
     expect(testResultHelpText).to.include(' [PATH] [DEPTH]'); // $ mocha testcommand [PATH] [DEPTH]
     expect(testResultHelpText).to.include('ARGUMENTS');

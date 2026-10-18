@@ -10,41 +10,41 @@ function runWithinDir(dir: string): (cmd: string) => Promise<ProcessOutput> {
 }
 
 describe('OclifUtils used in test projects', () => {
-  for (const v of ['2', '3', '4']) {
-    describe(`simple-cli-prj-v${v}`, () => {
+  for (const v of ['2', '3', '4', '5']) {
+    describe(`(v${v}) simple-cli-prj-v${v}`, () => {
       const runWithinPrj = runWithinDir(`test/simple-cli-prj-v${v}`);
-  
+
       before(async () => {
         const outcome = await runWithinPrj('rm -rf node_modules && npm ci');
         expect(outcome.exitCode).to.equal(0);
       });
-  
-      it('handles missing required arg', async () => {
+
+      it(`(v${v}) handles missing required arg`, async () => {
         const outcome = await runWithinPrj('./bin/run');
         expect(outcome.exitCode).to.equal(2);
         expect(outcome.stderr).to.contain('Missing 1 required arg');
       });
-  
-      it('handles missing required flag', async () => {
+
+      it(`(v${v}) handles missing required flag`, async () => {
         const outcome = await runWithinPrj('./bin/run me');
         expect(outcome.exitCode).to.equal(2);
         expect(outcome.stderr).to.contain('Missing required flag');
       });
-  
-      it('handles happy case', async () => {
+
+      it(`(v${v}) handles happy case`, async () => {
         const outcome = await runWithinPrj('./bin/run me --from myself');
         expect(outcome.exitCode).to.equal(0);
         expect(outcome.stdout).to.contain('Hello to me from myself');
       });
-  
-      it('handles happy case with --gen', async () => {
+
+      it(`(v${v}) handles happy case with --gen`, async () => {
         const outcome = await runWithinPrj('./bin/run me --from myself --gen');
         expect(outcome.exitCode).to.equal(0);
         expect(outcome.stdout).to.contain('simple-cli-prj me --gen --from myself');
       });
-  
+
       for (const arg of ['-h', '--help']) {
-        it(`prints help when there is only ${arg}`, async () => {
+        it(`(v${v}) prints help when there is only ${arg}`, async () => {
           const outcome = await runWithinPrj(`./bin/run ${arg}`);
           expect(outcome.exitCode).to.equal(0);
           expect(outcome.stdout).to.contain('USAGE');
@@ -60,22 +60,22 @@ describe('OclifUtils used in test projects', () => {
           expect(outcome.stdout).to.contain('$ simple-cli-prj hello friend --from oclif');
         });
       }
-  
-      it('does not print help when it is not the only argument', async () => {
+
+      it(`(v${v}) does not print help when it is not the only argument`, async () => {
         const outcome = await runWithinPrj('./bin/run me -h');
         expect(outcome.exitCode).to.equal(2);
         expect(outcome.stderr).to.contain('Missing required flag');
       });
 
       for (const arg of ['-v', '--version']) {
-        it(`prints version info when there is only ${arg}`, async () => {
+        it(`(v${v}) prints version info when there is only ${arg}`, async () => {
           const outcome = await runWithinPrj(`./bin/run ${arg}`);
           expect(outcome.exitCode).to.equal(0);
           expect(outcome.stdout).to.contain('simple-cli-prj/3.0.1');
         });
       }
 
-      it('updates README.md when there is only --update-readme.md', async () => {
+      it(`(v${v}) updates README.md when there is only --update-readme.md`, async () => {
         const readmeFile = `test/simple-cli-prj-v${v}/README.md`;
         fs.writeFileSync(readmeFile, '# Sample README\n## Manual\n<!-- help start -->\n<!-- help end -->\n');
 
@@ -94,6 +94,6 @@ describe('OclifUtils used in test projects', () => {
         expect(readmeFileContent).to.contain('DESCRIPTION');
         expect(readmeFileContent).to.contain('EXAMPLES');
       });
-    });  
+    });
   }
 });

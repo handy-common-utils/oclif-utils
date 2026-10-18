@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+
+require('tsx/cjs')
+
+const oclif = require('@oclif/core')
+oclif.settings.debug = true;
+
+require('../src').run()
+.catch(oclif.Errors.handle)
+.finally(oclif.flush);
