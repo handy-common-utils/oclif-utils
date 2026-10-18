@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "description": "oclif related utilities",
   "scripts": {
-    "pretest": "eslint .",
+    "pretest": "eslint . && npm run prepare",
     "test": "c8 mocha",
     "prepare": "shx rm -rf dist && tsc && es-check",
     "preversion": "generate-api-docs-and-update-readme && git add README.md"
