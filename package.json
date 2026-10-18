@@ -30,7 +30,7 @@
     "oclif": "^4.24.0",
     "semantic-release": "^25.0.9",
     "ts-node": "^10.9.2",
-    "zx": "^4.3.0"
+    "zx": "^8.8.5"
   },
   "publishConfig": {
     "access": "public"
