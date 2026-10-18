@@ -1,0 +1,20 @@
+name: Release if needed
+on:
+  workflow_run:
+    workflows: ['CI']
+    branches: [main, master]
+    types:
+      - completed
+
+jobs:
+  release-if-should:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: handy-common-utils/automation/github/actions/prepare-node@main
+        with:
+          fetch-depth: 0
+      - run: npx semantic-release
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+          GH_TOKEN: ${{ secrets.GORELEASER_PAT }}
