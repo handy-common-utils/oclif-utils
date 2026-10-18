@@ -24,6 +24,7 @@
   "devDependencies": {
     "@handy-common-utils/dev-dependencies-mocha": "^1.12.5",
     "@oclif/test": "^5.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^12.0.10",
     "@semantic-release/npm": "^13.2.0",
