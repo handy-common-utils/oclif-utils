@@ -6,6 +6,6 @@ const config = buildESLintConfig({ defaultSourceType: 'commonjs' });
 module.exports = defineConfig([
   ...config,
   {
-    ignores: ['coverage', 'test/**/dist'],
+    ignores: ['coverage', 'dist', 'test/simple-cli-prj*'],
   },
 ]);

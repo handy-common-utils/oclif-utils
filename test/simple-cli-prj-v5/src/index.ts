@@ -1,6 +1,5 @@
+import { enhancedFlags, reconstructCommandLine, withEnhancedFlagsHandled } from '@handy-common-utils/oclif-utils';
 import { Args, Command, Flags } from '@oclif/core';
-
-import { enhancedFlags, reconstructCommandLine, withEnhancedFlagsHandled } from '../../../src';
 
 class Hello extends Command {
   static id = ' '; // workaround for the correct USAGE section in help output

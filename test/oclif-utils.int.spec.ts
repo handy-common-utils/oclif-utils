@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 import * as fs from 'node:fs';
-import { $, ProcessOutput } from 'zx';
+import { $, path, ProcessOutput } from 'zx';
 
 function runWithinDir(dir: string): (cmd: string) => Promise<ProcessOutput> {
   function withinPrj(cmd: string): Promise<ProcessOutput> {
-    return $`cd ${dir} && ${cmd.split(' ')}`.catch((error) => error);
+    return $`cd ${dir} && node -v && ${cmd.split(' ')}`.catch((error) => error);
   }
   return withinPrj;
 }
@@ -12,11 +12,25 @@ function runWithinDir(dir: string): (cmd: string) => Promise<ProcessOutput> {
 describe('OclifUtils used in test projects', () => {
   for (const v of ['2', '3', '4', '5']) {
     describe(`(v${v}) simple-cli-prj-v${v}`, () => {
-      const runWithinPrj = runWithinDir(`test/simple-cli-prj-v${v}`);
+      const prjDir = `test/simple-cli-prj-v${v}`;
+      const runWithinPrj = runWithinDir(prjDir);
 
-      before(async () => {
-        const outcome = await runWithinPrj('rm -rf node_modules && npm ci');
-        expect(outcome.exitCode).to.equal(0);
+      it (`(v${v}) test fixture project has the correct @oclif/core version`, async function() {
+        // eslint-disable-next-line unicorn/no-this-outside-of-class
+        this.timeout(60000);
+        await runWithinPrj('rm -rf node_modules');
+        const ciOutcome = await runWithinPrj('npm ci');
+        expect(ciOutcome.exitCode).to.equal(0, `npm ci failed with exit code ${ciOutcome.exitCode} and stderr: ${ciOutcome.stderr}`);
+        const lsOutcome = await runWithinPrj('npm list @oclif/core');
+        const version = lsOutcome.stdout.split(/[\n\r]+/, 10).find((line) => line.includes('@oclif/core'))?.trim().split('@oclif/core@', 2)[1];
+        expect(version).to.match(new RegExp(`^${v}` + String.raw`\.`), `Expected @oclif/core version to start with ${v}. ${lsOutcome.stdout}`);
+
+        // Copy files into node_modules directory to simulate a local install of oclif-utils
+        const oclifUtilsDir = path.join(prjDir, 'node_modules/@handy-common-utils/oclif-utils');
+        fs.rmSync(oclifUtilsDir, { recursive: true, force: true });
+        fs.mkdirSync(oclifUtilsDir, { recursive: true });
+        fs.cpSync('dist', `${oclifUtilsDir}`, { recursive: true });
+        fs.cpSync('package.json', `${oclifUtilsDir}/package.json`);
       });
 
       it(`(v${v}) handles missing required arg`, async () => {
@@ -38,9 +52,9 @@ describe('OclifUtils used in test projects', () => {
       });
 
       it(`(v${v}) handles happy case with --gen`, async () => {
-        const outcome = await runWithinPrj('./bin/run me --from myself --gen');
+        const outcome = await runWithinPrj('./bin/run me --gen --from myself');
         expect(outcome.exitCode).to.equal(0);
-        expect(outcome.stdout).to.contain('simple-cli-prj me --gen --from myself');
+        expect(outcome.stdout).to.contain('simple-cli-prj me --from myself --gen');
       });
 
       for (const arg of ['-h', '--help']) {
