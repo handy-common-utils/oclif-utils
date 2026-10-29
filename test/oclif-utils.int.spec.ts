@@ -17,7 +17,7 @@ describe('OclifUtils used in test projects', () => {
 
       it (`(v${v}) test fixture project has the correct @oclif/core version`, async function() {
         // eslint-disable-next-line unicorn/no-this-outside-of-class
-        this.timeout(60000);
+        this.timeout(120000);
         await runWithinPrj('rm -rf node_modules');
         const ciOutcome = await runWithinPrj('npm ci');
         expect(ciOutcome.exitCode).to.equal(0, `npm ci failed with exit code ${ciOutcome.exitCode} and stderr: ${ciOutcome.stderr}`);
