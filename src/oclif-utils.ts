@@ -122,7 +122,10 @@ export async function injectHelpTextIntoReadmeMd<T extends Command>(commandInsta
  * Reconstruct the command line from already parsed options.
  * @param commandInstance When calling from the subclass of `Command`, just pass `this`
  * @param options Already parsed options. When calling from the subclass of `Command`, it is the return value of `this.parse(...)`.
- * @returns the command line string corresponding to the parsed options
+ * @returns The command line string corresponding to the parsed options.
+ *          Flags follow arguments, and flags are sorted alphabetically. Flags with boolean value of `false` are omitted.
+ *          Flags with boolean value of `true` are included without a value. Flags with non-boolean values are included with their values.
+ *          If a flag has multiple values, each value is included separately.
  */
 export function reconstructCommandLine<T extends { args: Array<{ name: string }>; new(...args: any): any }>(commandInstance: InstanceType<T>, options: Awaited<ReturnType<Command['parse']>>): string {
   const args = new Array<string>();
