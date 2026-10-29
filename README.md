@@ -317,7 +317,10 @@ Reconstruct the command line from already parsed options.
 
 `string`
 
-the command line string corresponding to the parsed options
+The command line string corresponding to the parsed options.
+         Flags follow arguments, and flags are sorted alphabetically. Flags with boolean value of `false` are omitted.
+         Flags with boolean value of `true` are included without a value. Flags with non-boolean values are included with their values.
+         If a flag has multiple values, each value is included separately.
 
 
 <a id="oclif-utilsfunctionswithenhancedflagshandledmd"></a>

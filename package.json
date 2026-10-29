@@ -1,6 +1,6 @@
 {
   "name": "@handy-common-utils/oclif-utils",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "oclif related utilities",
   "scripts": {
     "pretest": "eslint . && npm run prepare",
