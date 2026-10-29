@@ -1,6 +1,7 @@
+import type { Input, OutputFlags, ParserOutput } from '@oclif/core/parser';
+
 import { replaceInFile } from '@handy-common-utils/fs-utils';
 import { Command, Flags, Help, Interfaces } from '@oclif/core';
-import { Input, OutputFlags, ParserOutput } from '@oclif/core/parser';
 
 /**
  * Helper class to utilise protected method formatCommand(...) in the parent class
@@ -130,7 +131,9 @@ export function reconstructCommandLine<T extends { args: Array<{ name: string }>
     args.push(...options.argv.map((x: any) => quoteIfNeeded(x)));
   }
   if (options.flags) {
-    for (const [flagName, flagValue] of Object.entries(options.flags)) {
+    // eslint-disable-next-line unicorn/no-array-sort
+    const sortedFlagEntries = Object.entries(options.flags).sort((a, b) => a[0].localeCompare(b[0]));
+    for (const [flagName, flagValue] of sortedFlagEntries) {
       if (flagValue === false) {
         continue;
       }

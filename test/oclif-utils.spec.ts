@@ -147,7 +147,7 @@ describe('OclifUtils', () => {
       'abc and d',
       '--server',
     ]);
-    expect(testResultCommandLine).to.eq("oclif 9 api-doc --region ap-southeast-2 --include '*xyz*' 'abc and d' --exclude x1 --server --port 8002 --parallelism 10");
+    expect(testResultCommandLine).to.eq("oclif 9 api-doc --exclude x1 --include '*xyz*' 'abc and d' --parallelism 10 --port 8002 --region ap-southeast-2 --server");
   });
 
   it('should call additionalHandler when provided', async () => {
