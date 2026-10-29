@@ -7,4 +7,7 @@ updates:
     
     # Specify the directories you want to ignore
     exclude-paths:
-      - "test/simple-cli-prj*/**"   # Ignores a specific test fixtures folder
+      - "test/simple-cli-prj-v2/**"
+      - "test/simple-cli-prj-v3/**"
+      - "test/simple-cli-prj-v4/**"
+      - "test/simple-cli-prj-v5/**"
