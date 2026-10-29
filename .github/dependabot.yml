@@ -1,0 +1,10 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/" # The root directory where parsing normally starts
+    schedule:
+      interval: "weekly"
+    
+    # Specify the directories you want to ignore
+    exclude-paths:
+      - "test/simple-cli-prj*/**"   # Ignores a specific test fixtures folder
